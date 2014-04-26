@@ -1,0 +1,27 @@
+[user]
+    email = pontus@thefarm.se
+    name = Pontus Carlsson
+[core]
+    editor = vim
+    whitespace = cr-at-eol
+    autocrlf = input
+[color]
+    ui = auto
+[alias]
+    root = rev-parse --show-toplevel
+    conflicts = diff --name-only --diff-filter=U
+    resolve = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; vim `f`"
+    admit = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+    fix-permissions = "!git diff -p | grep -E '^(diff|old mode|new mode)' | sed -e 's/^old/NEW/;s/^new/old/;s/^NEW/new/' | git apply"
+    purge = "clean -fdx"
+    graph = log --graph --full-history --all --color --pretty=format:'%x1b[31m%h%x09%x1b[32m %C(white)- %d%x1b[0m%x20%s %Cgreen(%cr) %C(bold blue)%Creset' --date=relative
+    df = -c core.fileMode=false diff
+    cm = commit -a
+    co = checkout
+    rb = rebase
+    mg = merge
+    lg = graph
+[push]
+    default = simple
+[init]
+	templatedir = ~/.git_template

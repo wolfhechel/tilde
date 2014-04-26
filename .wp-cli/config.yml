@@ -1,0 +1,6 @@
+core install:
+    admin_user: admin
+    admin_email: null@thefarm.se
+
+require:
+    - vendor/autoload.php

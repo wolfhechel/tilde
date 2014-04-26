@@ -1,0 +1,7 @@
+port_range = 46012-46012
+directory = ~/Downloads
+session = ~/.cache/rtorrent-sessions
+
+peer_exchange = false
+dht = off
+max_memory_usage=512M

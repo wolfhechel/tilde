@@ -1,0 +1,16 @@
+{
+    "minimum-stability": "dev",
+    "require": {
+        "wp-cli/server-command": "*"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "vendor-dir": "vendor"
+    },
+    "repositories": {
+        "wp-cli": {
+            "type": "composer",
+            "url": "http://wp-cli.org/package-index/"
+        }
+    }
+}
