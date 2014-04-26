@@ -28,3 +28,20 @@ if [ "$(uname)" != "Darwin" ]; then
 fi
 
 alias grep='grep --color'
+
+# Make less accept color lines and output them as well
+alias less='less -R'
+
+# Make unified diff syntax the default
+alias diff="diff -u"
+
+# JSON prettify
+alias json="python -m json.tool"
+
+if [ "$(uname)" = "Darwin" ]; then
+    _n_cpus=$(sysctl -n hw.ncpu)
+else;
+    _n_cpus=$(nproc)
+fi
+
+alias make="make -j${_n_cpus}"
