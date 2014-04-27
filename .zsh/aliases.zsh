@@ -45,3 +45,8 @@ else;
 fi
 
 alias make="make -j${_n_cpus}"
+
+# Alias a virtualenv command that uses Python 3 interpreter, if available
+_python3_path=$(which python3)
+
+[ $? -eq 0 ] && alias virtualenv3="virtualenv -p ${_python3_path}"
