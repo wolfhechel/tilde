@@ -5,7 +5,7 @@ sysname, nodename, release, version, machine = os.uname()
 try:
     import readline
 except ImportError:
-    print 'Module readline not avaliable.'
+    print('Module readline not avaliable.')
 else:
     import rlcompleter
 
