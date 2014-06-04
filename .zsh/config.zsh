@@ -81,3 +81,6 @@ export LC_ALL LANG
 # Which is a bit different on a Mac
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
+
+# XCode 5.1 Clang Compiler has issues with compiling Python C extensions
+export ARCHFLAGS=-Wno-error=unused-command-line-argument-hard-error-in-future
