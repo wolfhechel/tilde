@@ -1,3 +1,5 @@
+fpath=($fpath $HOME/.zsh/comp)
+
 for conf in config aliases bindings commands completion prompt virtualenv path; do
     . ~/.zsh/$conf.zsh
 done
