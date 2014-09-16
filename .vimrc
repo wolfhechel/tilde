@@ -1,62 +1,69 @@
-" This is mine, my precious!
-" I do have some references though;
-" * https://raw.github.com/nvie/vimrc/master/vimrc
-" * http://nvie.com/posts/how-i-boosted-my-vim/
-" * http://net.tutsplus.com/articles/general/top-10-pitfalls-when-switching-to-vim/
-" * https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
-" * http://vim.wikia.com/wiki/Make_Vim_completion_popup_menu_work_just_like_in_an_IDE
-"
-" And here's some plugins I wanna include later on:
-" * gundo
-" * fugitive
-" * YankRing
-" * Sparkup
-" * Flake8
+if has('vim_starting')
+    " Disables vi compatibility
+    set nocompatible
 
-" Disables vi compatibility
-set nocompatible
+    set rtp+=~/.vim/bundle/neobundle.vim/
+endif
 
-" Everybody needs a neat colorscheme
-colorscheme darkspectrum
+call neobundle#begin(expand('~/.vim/bundle/'))
 
-" Add our own help documents in the runtime
-runtime docs
+NeoBundle 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/vimproc.vim', {
+      \ 'build' : {
+      \     'windows' : 'tools\\update-dll-mingw',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ }
 
-" Now let's get it infecting!
-runtime bundle/pathogen/autoload/pathogen.vim
+NeoBundle 'Shougo/unite.vim'
 
-call pathogen#infect()
-call pathogen#helptags()
+nnoremap <leader>j :Unite file_rec/async<cr>i<cr>
+
+NeoBundle 'bling/vim-airline'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'SirVer/ultisnips'
+
+
+let g:UltiSnipsExpandTrigger="<c-o>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsListSnippets="<nop>"
+
+NeoBundle 'honza/vim-snippets'
+NeoBundle 'Valloric/YouCompleteMe' , {
+    \ 'build' : {
+    \   'unix' : './install.sh --clang-completer'
+    \ }
+\ }
+
+let g:ycm_extra_conf_globlist = ['~/.ycm_extra_conf.py']
+
+imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
+
+NeoBundle 'Raimondi/delimitMate'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'majutsushi/tagbar'
+
+call neobundle#end()
 
 " Enable the filetype plugin, remain compatible with older versions
 if has('autocmd')
     filetype plugin indent on
 endif
 
+NeoBundleCheck
+
+" Everybody needs a neat colorscheme
+colorscheme darkspectrum
+
 " Enable syntax highlighting, if possible
 if has('syntax') && !exists('g:syntax_on')
     syntax on
 endif
 
-" Here goes some variables!
-
 " First, set a sane leader key
 let mapleader=","
-
-" Disabled default LustyJuggler keymappings
-let g:LustyJugglerDefaultMappings=0
-
-" Disable jedi-vim autocomplete on dot
-let g:jedi#popup_on_dot = 0
-
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-
-" Let CtrlP use the Command-T bindings
-let g:ctrlp_map='<leader>j'
-" Set the working path to directory matching root markers or current working
-let g:ctrlp_working_path_mode ='rc'
-" Additional root markers
-let g:ctrlp_root_markers = ['build.gradle', '.Python', '.idea', '*.xcodeproj']
 
 " Buffer options
 set hidden            " Switch between buffers without saving
@@ -97,7 +104,12 @@ set shiftround    " Use multiples of shiftwidth when <> indenting
 " Text wrapping options
 set textwidth=79        " Line max-length hint
 set wrap                " Wrap text
-set formatoptions=qrnlj " Options for text-wrapping/-formatting (:help fo-tables)
+set formatoptions=qrnl  " Options for text-wrapping/-formatting (:help fo-tables)
+
+if v:version >= 704 || (v:version == 703 && has('patch541'))
+    " Merge comment lines
+    set formatoptions+=j 
+endif
 
 " Interface options
 set number        " Line numbering
@@ -136,16 +148,12 @@ set cursorline                 " Highlights current line
 " Code folding options
 set foldenable 
 
-
 "
 " Keymappings
 "
 
 " Space clears search highlights
 nnoremap <silent> <Space> :nohlsearch<CR>
-
-" In insert mode, something easier than reaching for <ESC>
-inoremap jk <ESC>
 
 " And in normal mode, bind to command (since I'm Swedish)
 nnoremap ö :
@@ -183,7 +191,7 @@ imap <left> <nop>
 imap <right> <nop>
 
 " Replace visually selected python code with the output
-vnoremap <silent> ,e :!python<cr>
+vnoremap <silent> <C-e>p :!python<cr>
 
 " Toggle LustyJuggler
 map <leader>l :LustyJuggler<CR>
@@ -191,15 +199,9 @@ map <leader>l :LustyJuggler<CR>
 " Show buffer of file without hashcomments
 nnoremap <leader>c :g!/^#
 
-" Quick edit of vimrc
-nnoremap <leader>v :e $MYVIMRC<CR>
-
 " Append and prepend to line
 nnoremap <leader>p i<C-o>$
 nnoremap <leader>a i<C-o>^
-
-" Quicker way to save file
-nnoremap <leader>w :w<CR>
 
 " Save file with elevated privileges
 cmap w!! w !sudo tee % >/dev/null
@@ -240,14 +242,11 @@ if has('autocmd')
     au BufRead,BufNewFile *.sls set ft=yaml ts=4 sts=4 sw=4
     au BufRead,BufNewFile *.gradle setf groovy
 
-    "Set up an HTML5 template for all new .html files  
-    "autocmd BufNewFile * silent! 0r $VIMHOME/templates/%:e.tpl  
+    " In insert mode, something easier than reaching for <ESC>
+    au BufEnter * exec "inoremap <silent> <c-i> <esc><cr>"
 
     " Never expand tabs when editing Makefiles
     autocmd FileType make setlocal noexpandtab
-
-    " Call Flake8 checking when saving a python buffer
-    autocmd BufWritePost *.py call Flake8()
 
     " Autosave files on leaving buffer, leaving insert mode or lost focus
     autocmd BufLeave,FocusLost,InsertLeave * silent! wall
