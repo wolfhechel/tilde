@@ -21,6 +21,7 @@
     rb = rebase
     mg = merge
     lg = graph
+    flow = "git-flow"
 [push]
     default = simple
 [init]
