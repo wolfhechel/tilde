@@ -29,6 +29,9 @@ _force_rehash() {
 # Menu driven completion
 zstyle ':completion:*' menu select
 
+# Autocomplete special directories
+zstyle ':completion:*' special-dirs true
+
 # Completion selection by menu for kill
 zstyle ':completion:*:*:kill:*' menu yes select
 zstyle ':completion:*:kill:*' force-list always
@@ -95,3 +98,16 @@ expand-or-complete-with-dots() {
 
 zle -N expand-or-complete-with-dots
 bindkey "^I" expand-or-complete-with-dots
+
+# Automatically replace > 2 dots with slashed paths
+rationalise-dot() {
+  if [[ $LBUFFER = *.. ]]; then
+    LBUFFER+=/..
+  else
+    LBUFFER+=.
+  fi
+}
+
+zle -N rationalise-dot
+bindkey . rationalise-dot
+
