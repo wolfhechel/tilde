@@ -13,7 +13,7 @@ for comp_script in ${_bash_completions}; do
 done
 
 # Expands aliases AFTER completion, making aliases distinct commands
-setopt complete_aliases
+# setopt complete_aliases
 
 # Enable completion list even if there's an unambiguous prefix or suffix
 unsetopt LIST_AMBIGUOUS

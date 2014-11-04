@@ -9,7 +9,7 @@ alias push="git push"
 alias sprunge="curl --url sprunge.us -F sprunge=@"
 
 # Convenience aliases
-alias dj='python2 manage.py'
+alias dj='./manage.py'
 alias djangoproject='django-admin.py startproject -e py,txt --template=https://github.com/wolfhechel/django-boilerplate/archive/master.zip'
 alias mkdir='mkdir -p'
 
