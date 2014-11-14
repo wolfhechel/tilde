@@ -5,54 +5,59 @@ if has('vim_starting')
     set rtp+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#begin(expand('~/.vim/bundle/'))
+if exists(":NeoBundle")
+    call neobundle#begin(expand('~/.vim/bundle/'))
 
-NeoBundle 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/vimproc.vim', {
-      \ 'build' : {
-      \     'windows' : 'tools\\update-dll-mingw',
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
-      \    },
-      \ }
+    NeoBundle 'Shougo/neobundle.vim'
+    NeoBundle 'Shougo/vimproc.vim', {
+        \ 'build' : {
+        \     'windows' : 'tools\\update-dll-mingw',
+        \     'cygwin' : 'make -f make_cygwin.mak',
+        \     'mac' : 'make -f make_mac.mak',
+        \     'unix' : 'make -f make_unix.mak',
+        \    },
+        \ }
 
-NeoBundle 'Shougo/unite.vim'
+    NeoBundle 'Shougo/unite.vim'
+    NeoBundle 'bling/vim-airline'
+    NeoBundle 'tpope/vim-surround'
+    NeoBundle 'SirVer/ultisnips'
+    NeoBundle 'honza/vim-snippets'
+    NeoBundle 'Valloric/YouCompleteMe' , {
+        \ 'build' : {
+        \   'unix' : './install.sh --clang-completer'
+        \ }
+    \ }
 
-nnoremap <leader>j :Unite file_rec/async<cr>i<cr>
+    NeoBundle 'Raimondi/delimitMate'
+    NeoBundle 'scrooloose/syntastic'
+    NeoBundle 'majutsushi/tagbar'
 
-NeoBundle 'bling/vim-airline'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'SirVer/ultisnips'
+    call neobundle#end()
 
+    NeoBundleCheck
+else
+    echom "Could not find NeoBundle, make sure you've checked it out into .vim/bundle/NeoBundle.vim"
+endif
+
+if exists(":Unite")
+    nnoremap <leader>j :Unite file_rec/async<cr>i<cr>
+endif
 
 let g:UltiSnipsExpandTrigger="<c-o>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsListSnippets="<nop>"
 
-NeoBundle 'honza/vim-snippets'
-NeoBundle 'Valloric/YouCompleteMe' , {
-    \ 'build' : {
-    \   'unix' : './install.sh --clang-completer'
-    \ }
-\ }
-
 let g:ycm_extra_conf_globlist = ['~/.ycm_extra_conf.py']
 
-imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
-
-NeoBundle 'Raimondi/delimitMate'
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'majutsushi/tagbar'
-
-call neobundle#end()
+if exists(":DelimitMateTest")
+    imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
+endif
 
 " Enable the filetype plugin, remain compatible with older versions
 if has('autocmd')
     filetype plugin indent on
 endif
-
-NeoBundleCheck
 
 " Everybody needs a neat colorscheme
 colorscheme darkspectrum
