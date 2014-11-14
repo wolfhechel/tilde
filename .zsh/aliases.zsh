@@ -5,16 +5,11 @@ alias merge="git merge"
 alias pull="git pull"
 alias push="git push"
 
-# Sprunge alias
-alias sprunge="curl --url sprunge.us -F sprunge=@"
-
 # Convenience aliases
 alias dj='./manage.py'
-alias djangoproject='django-admin.py startproject -e py,txt --template=https://github.com/wolfhechel/django-boilerplate/archive/master.zip'
+alias djangoproject='django-admin.py startproject -e py,txt --template=https://github.com/wolfhechel/django-project-boilerplate/archive/master.zip'
+alias djangoapp='django-admin.py startapp -e py --template=https://github.com/wolfhechel/django-application-boilerplate/archive/master.zip'
 alias mkdir='mkdir -p'
-
-# Run pacman as superuser by default
-alias pacman="sudo /usr/bin/pacman"
 
 # Play it safe!
 alias rm='rm -i'
