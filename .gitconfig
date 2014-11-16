@@ -1,12 +1,19 @@
 [user]
-    email = pontus@thefarm.se
-    name = Pontus Carlsson
+    email = pontuscarlsson@live.se
+    name = Pontus Karlsson
+
 [core]
     editor = vim
-    whitespace = cr-at-eol
+    whitespace = cr-at-eol,space-before-tab,-indent-with-non-tab,trailing-space
     autocrlf = input
+
+    # Makes rebase safer on OS X
+    # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+    trustctime = false
+
 [color]
     ui = auto
+
 [alias]
     root = rev-parse --show-toplevel
     conflicts = diff --name-only --diff-filter=U
@@ -15,14 +22,40 @@
     fix-permissions = "!git diff -p | grep -E '^(diff|old mode|new mode)' | sed -e 's/^old/NEW/;s/^new/old/;s/^NEW/new/' | git apply"
     purge = "clean -fdx"
     graph = log --graph --full-history --all --color --pretty=format:'%x1b[31m%h%x09%x1b[32m %C(white)- %d%x1b[0m%x20%s %Cgreen(%cr) %C(bold blue)%Creset' --date=relative
+    flow = "git-flow"
+    contributors = shortlog --summary --numbered
+    branches = branch -a
+    tags = tag -l
+    remotes = remote -v
     df = -c core.fileMode=false diff
     cm = commit -a
     co = checkout
     rb = rebase
     mg = merge
     lg = graph
-    flow = "git-flow"
+
 [push]
     default = simple
-[init]
-	templatedir = ~/.git_template
+
+[apply]
+    # Detect whitespace errors when applying a patch
+    whitespace = fix
+
+[diff]
+    # Detect copies as well as renames
+    renames = copies
+
+[help]
+    # Automatically correct mistyped commands
+    autocorrect = 1
+
+[merge]
+    # Include merge summaries in commit message
+    log = true
+
+# URL Shorthans
+[url "git://github.com/"]
+    insteadOf = "github:"
+
+[url "git://gist.github.com/"]
+    insteadOf = "gist:"
