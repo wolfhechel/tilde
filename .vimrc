@@ -5,14 +5,12 @@ if has('vim_starting')
     set rtp+=~/.vim/bundle/neobundle.vim/
 endif
 
-if exists(":NeoBundle")
+try
     call neobundle#begin(expand('~/.vim/bundle/'))
 
     NeoBundle 'Shougo/neobundle.vim'
     NeoBundle 'Shougo/vimproc.vim', {
         \ 'build' : {
-        \     'windows' : 'tools\\update-dll-mingw',
-        \     'cygwin' : 'make -f make_cygwin.mak',
         \     'mac' : 'make -f make_mac.mak',
         \     'unix' : 'make -f make_unix.mak',
         \    },
@@ -29,6 +27,7 @@ if exists(":NeoBundle")
         \ }
     \ }
 
+    NeoBundle 'jalcine/cmake.vim'
     NeoBundle 'Raimondi/delimitMate'
     NeoBundle 'scrooloose/syntastic'
     NeoBundle 'majutsushi/tagbar'
@@ -36,13 +35,11 @@ if exists(":NeoBundle")
     call neobundle#end()
 
     NeoBundleCheck
-else
+catch
     echom "Could not find NeoBundle, make sure you've checked it out into .vim/bundle/NeoBundle.vim"
-endif
+endtry
 
-if exists(":Unite")
-    nnoremap <leader>j :Unite file_rec/async<cr>i<cr>
-endif
+nnoremap <leader>j :Unite file_rec/async<cr>i<cr>
 
 let g:UltiSnipsExpandTrigger="<c-o>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
@@ -50,9 +47,7 @@ let g:UltiSnipsListSnippets="<nop>"
 
 let g:ycm_extra_conf_globlist = ['~/.ycm_extra_conf.py']
 
-if exists(":DelimitMateTest")
-    imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
-endif
+imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
 
 " Enable the filetype plugin, remain compatible with older versions
 if has('autocmd')
