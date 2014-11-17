@@ -23,6 +23,10 @@
     purge = "clean -fdx"
     graph = log --graph --full-history --all --color --pretty=format:'%x1b[31m%h%x09%x1b[32m %C(white)- %d%x1b[0m%x20%s %Cgreen(%cr) %C(bold blue)%Creset' --date=relative
     flow = "git-flow"
+    feature = flow feature
+    release = flow release
+    hotfix = flow hotfix
+    support = flow support
     contributors = shortlog --summary --numbered
     branches = branch -a
     tags = tag -l
