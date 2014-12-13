@@ -37,6 +37,7 @@
     rb = rebase
     mg = merge
     lg = graph
+    fuckit = reset --hard HEAD
 
 [push]
     default = simple
