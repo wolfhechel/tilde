@@ -25,6 +25,7 @@
     flow = "git-flow"
     feature = flow feature
     release = flow release
+    publish ="!git-flow feature publish `git rev-parse --abbrev-ref HEAD | cut -d'/' -f2`"
     hotfix = flow hotfix
     support = flow support
     contributors = shortlog --summary --numbered
