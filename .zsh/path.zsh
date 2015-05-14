@@ -2,6 +2,7 @@ _paths_to_try=(
     "${HOME}/node_modules/.bin"
     "${HOME}/.bin"
     "${HOME}/.wp-cli/bin"
+    "${GOPATH}/bin"
 )
 
 for path_to_try in ${_paths_to_try}; do

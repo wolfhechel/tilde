@@ -71,6 +71,10 @@ export PERL_LOCAL_LIB_ROOT \
        PERL_MM_OPT \
        PERL5LIB
 
+GOPATH=~/Code/Go
+
+export GOPATH
+
 export PYTHONSTARTUP=$HOME/.pythonrc.py
 
 # Locale settings, always go English!
