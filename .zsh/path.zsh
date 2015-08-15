@@ -1,6 +1,8 @@
 _paths_to_try=(
     "${HOME}/node_modules/.bin"
     "${HOME}/.bin"
+    "$(brew --prefix)/sbin"
+    "$(brew --prefix)/bin"
     "${HOME}/.wp-cli/bin"
     "${GOPATH}/bin"
 )
