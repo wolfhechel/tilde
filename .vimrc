@@ -1,58 +1,12 @@
-if has('vim_starting')
-    " Disables vi compatibility
-    set nocompatible
-
-    set rtp+=~/.vim/bundle/neobundle.vim/
-endif
-
-try
-    call neobundle#begin(expand('~/.vim/bundle/'))
-
-    NeoBundle 'Shougo/neobundle.vim'
-    NeoBundle 'Shougo/vimproc.vim', {
-        \ 'build' : {
-        \     'mac' : 'make -f make_mac.mak',
-        \     'unix' : 'make -f make_unix.mak',
-        \    },
-        \ }
-
-    NeoBundle 'Shougo/unite.vim'
-    NeoBundle 'bling/vim-airline'
-    NeoBundle 'tpope/vim-surround'
-    NeoBundle 'SirVer/ultisnips'
-    NeoBundle 'honza/vim-snippets'
-    NeoBundle 'Valloric/YouCompleteMe' , {
-        \ 'build' : {
-        \   'unix' : './install.sh --clang-completer'
-        \ }
-    \ }
-
-    NeoBundle 'jalcine/cmake.vim'
-    NeoBundle 'Raimondi/delimitMate'
-    NeoBundle 'scrooloose/syntastic'
-    NeoBundle 'majutsushi/tagbar'
-
-    call neobundle#end()
-
-    NeoBundleCheck
-catch
-    echom "Could not find NeoBundle, make sure you've checked it out into .vim/bundle/NeoBundle.vim"
-endtry
-
-nnoremap <leader>j :Unite file_rec/async<cr>i<cr>
-
-let g:UltiSnipsExpandTrigger="<c-o>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsListSnippets="<nop>"
-
-let g:ycm_extra_conf_globlist = ['~/.ycm_extra_conf.py']
-
-imap <expr> <CR> pumvisible() ? "\<c-y>" : "<Plug>delimitMateCR"
+" Disables vi compatibility
+set nocompatible
 
 " Enable the filetype plugin, remain compatible with older versions
 if has('autocmd')
     filetype plugin indent on
 endif
+
+set omnifunc=syntaxcomplete#Complete
 
 " Everybody needs a neat colorscheme
 colorscheme darkspectrum
@@ -61,6 +15,7 @@ colorscheme darkspectrum
 if has('syntax') && !exists('g:syntax_on')
     syntax on
 endif
+
 
 " First, set a sane leader key
 let mapleader=","
@@ -190,18 +145,8 @@ imap <down> <nop>
 imap <left> <nop>
 imap <right> <nop>
 
-" Replace visually selected python code with the output
-vnoremap <silent> <C-e>p :!python<cr>
-
-" Toggle LustyJuggler
-map <leader>l :LustyJuggler<CR>
-
 " Show buffer of file without hashcomments
 nnoremap <leader>c :g!/^#
-
-" Append and prepend to line
-nnoremap <leader>p i<C-o>$
-nnoremap <leader>a i<C-o>^
 
 " Save file with elevated privileges
 cmap w!! w !sudo tee % >/dev/null
@@ -242,15 +187,9 @@ if has('autocmd')
     au BufRead,BufNewFile *.sls set ft=yaml ts=4 sts=4 sw=4
     au BufRead,BufNewFile *.gradle setf groovy
 
-    " In insert mode, something easier than reaching for <ESC>
-    au BufEnter * exec "inoremap <silent> <c-i> <esc><cr>"
-
     " Never expand tabs when editing Makefiles
     autocmd FileType make setlocal noexpandtab
 
     " Autosave files on leaving buffer, leaving insert mode or lost focus
     autocmd BufLeave,FocusLost,InsertLeave * silent! wall
 endif
-
-" Occasionally, I mess up
-iab imoprt import
