@@ -1,0 +1,34 @@
+! Fonts {{{
+Xft.antialias: true
+Xft.hinting:   true
+Xft.rgba:      rgb
+Xft.hintstyle: hintfull
+Xft.dpi:       220
+! }}}
+
+URxvt*font: xft:Bitstream Vera Sans Mono:pixelsize=12
+URxvt*scrollBar: false
+URxvt*background: #000000
+URxvt*foreground: #cccccc
+URxvt*colorUL: #86a2b0
+
+URxvt*color0:  #2e3236
+URxvt*color1:  #cc0000
+URxvt*color2:  #4e9a06
+URxvt*color3:  #c4a000
+URxvt*color4:  #3465a4
+URxvt*color5:  #75507b
+URxvt*color6:  #06989a
+URxvt*color7:  #d3d7cf
+URxvt*color8:  #555753
+URxvt*color9:  #ef2929
+URxvt*color10: #8ae234
+URxvt*color11: #fce94f
+URxvt*color12: #729fcf
+URxvt*color13: #ad7fa8
+URxvt*color14: #34e2e2
+URxvt*color15: #eeeeec
+
+
+URxvt*font:               xft:Inconsolata:style=Semibold:pixelsize=15:antialias=true
+URxvt*boldFont:           xft:Inconsolata:style=bold:pixelsize=15:antialias=true
