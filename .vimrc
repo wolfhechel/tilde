@@ -1,6 +1,18 @@
 " Disables vi compatibility
 set nocompatible
 
+set runtimepath+=~/.vim/dein/repos/github.com/Shougo/dein.vim
+
+call dein#begin(expand('~/.vim/dein'))
+
+call dein#add('Shougo/dein.vim')
+
+call dein#add('ctrlpvim/ctrlp.vim')
+call dein#add('vim-airline/vim-airline')
+call dein#add('vim-airline/vim-airline-themes')
+call dein#add('scrooloose/nerdtree')
+call dein#end()
+
 " Enable the filetype plugin, remain compatible with older versions
 if has('autocmd')
     filetype plugin indent on
@@ -119,6 +131,7 @@ nnoremap + <C-a>
 " Decrement number below cursor
 nnoremap - <C-x>
 
+nnoremap <silent> <C-B> :NERDTreeToggle<CR>
 " Faster navigation through paragraphs (in Insert mode)
 inoremap <C-j> <C-o>}
 inoremap <C-k> <C-o>{
