@@ -1,6 +1,6 @@
 fpath=($fpath $HOME/.zsh/comp)
 
-for conf in config aliases bindings commands prompt completion virtualenv path gcloud; do
+for conf in config aliases bindings commands prompt completion virtualenv path gcloud node_modules; do
     . ~/.zsh/$conf.zsh
 done
 

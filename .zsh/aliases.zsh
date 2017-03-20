@@ -43,3 +43,7 @@ else;
 fi
 
 export NUMCORES=${_n_cpus}
+
+if which thefuck &> /dev/null; then
+    eval $(thefuck --alias)
+fi
