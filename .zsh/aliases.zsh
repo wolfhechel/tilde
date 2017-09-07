@@ -43,3 +43,13 @@ else;
 fi
 
 export NUMCORES=${_n_cpus}
+
+eval $(thefuck --alias)
+
+function aur-install() {
+    (
+        cd ~/.packages
+
+        cower -d $1 && cd $1 && makepkg -i --noconfirm
+    )
+}

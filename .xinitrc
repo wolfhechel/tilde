@@ -1,15 +1,11 @@
 #!/bin/sh
 
-MACBOOK_DISPALY=eDP1
+setxkbmap -option "lv3:alt_switch,ctrl:nocaps" se
 
-xrandr | grep ${MACBOOK_DISPLAY}
+xmodmap ~/.Xmodmap
 
-if [ $? -eq 0 ]; then
-    xrandr --output ${MACBOOK_DISPLAY} --mode 1920x1200
-fi
+[[ -f $HOME/.Xresources ]] && xrdb -merge $HOME/.Xresources
 
-setxkbmap -option ctrl:nocaps
+[[ -f $HOME/.fehbg ]] && source $HOME/.fehbg
 
-[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
-
-exec dwm
+exec qtile
