@@ -1,5 +1,5 @@
 _paths_to_try=(
-    "${HOME}/node_modules/.bin"
+    #"${HOME}/node_modules/.bin"
     "${HOME}/.bin"
     "${HOME}/.wp-cli/bin"
 )
