@@ -3,7 +3,7 @@ Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb
 Xft.hintstyle: hintfull
-Xft.dpi:       220
+!Xft.dpi:       220
 ! }}}
 
 ! URxvt {{{
@@ -30,9 +30,14 @@ URxvt*color13: #ad7fa8
 URxvt*color14: #34e2e2
 URxvt*color15: #eeeeec
 
-
 URxvt*font:               xft:Droid Sans Mono:style=Semibold:pixelsize=15:antialias=true
 URxvt*boldFont:           xft:Droid Sans Mono:style=bold:pixelsize=15:antialias=true
+
+URxvt.depth:    32
+URxvt.geometry: 90x30
+URxvt.loginShell: true
+URxvt.lineSpace: 0
+
 ! }}}
 
 
