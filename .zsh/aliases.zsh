@@ -52,4 +52,3 @@ fi
 for l in {a..z}; do
     alias g${l}t=git
 done
-
