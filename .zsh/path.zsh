@@ -2,6 +2,7 @@ _paths_to_try=(
     #"${HOME}/node_modules/.bin"
     "${HOME}/.bin"
     "${HOME}/.wp-cli/bin"
+    "/usr/local/opt/mysql@5.7/bin"
 )
 
 for path_to_try in ${_paths_to_try}; do

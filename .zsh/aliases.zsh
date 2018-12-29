@@ -47,3 +47,9 @@ export NUMCORES=${_n_cpus}
 if which thefuck &> /dev/null; then
     eval $(thefuck --alias)
 fi
+
+# Nevermore
+for l in {a..z}; do
+    alias g${l}t=git
+done
+

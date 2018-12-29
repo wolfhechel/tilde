@@ -29,3 +29,10 @@ go_back() {
 zle -N go-back go_back
 
 bindkey "^[p" go-back
+
+slash-backward-kill-word() {
+    local WORDCHARS="${WORDCHARS:s@/@}"
+    zle backward-kill-word
+}
+zle -N slash-backward-kill-word
+bindkey '\e^?' slash-backward-kill-word

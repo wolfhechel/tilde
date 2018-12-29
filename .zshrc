@@ -1,8 +1,24 @@
 fpath=($fpath $HOME/.zsh/comp)
 
-for conf in config aliases bindings commands prompt completion virtualenv path gcloud node_modules; do
+declare -a extra_confs=(
+    config
+    aliases
+    bindings
+    commands
+    prompt
+    completion
+    virtualenv
+    path
+    gcloud
+    zsh-autosuggestions/zsh-autosuggestions
+    zsh-syntax-highlighting/zsh-syntax-highlighting
+)
+
+for conf in ${extra_confs[*]}; do
     . ~/.zsh/$conf.zsh
 done
+
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 
 _host=$(hostname -s)
 
