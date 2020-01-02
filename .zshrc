@@ -15,7 +15,7 @@ declare -a extra_confs=(
 )
 
 for conf in ${extra_confs[*]}; do
-    . ~/.zsh/$conf.zsh
+    [ -f ~/.zsh/$conf.zsh ] && . ~/.zsh/$conf.zsh
 done
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)

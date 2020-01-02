@@ -9,7 +9,7 @@ Xft.hintstyle: hintfull
 ! URxvt {{{
 
 URxvt*scrollBar: false
-URxvt*background: #000000
+URxvt*background: #222222
 URxvt*foreground: #cccccc
 URxvt*colorUL: #86a2b0
 
@@ -30,8 +30,10 @@ URxvt*color13: #ad7fa8
 URxvt*color14: #34e2e2
 URxvt*color15: #eeeeec
 
-URxvt*font:               xft:Droid Sans Mono:style=Semibold:pixelsize=15:antialias=true
-URxvt*boldFont:           xft:Droid Sans Mono:style=bold:pixelsize=15:antialias=true
+! Using Hack font
+URxvt*font:         xft:Hack-Regular:pixelsize=15
+URxvt*boldFont:     xft:Hack-Bold:pixelsize=15
+URxvt*italicFont:   xft:Hack-RegularOblique:pixelsize=15
 
 URxvt.depth:    32
 URxvt.geometry: 90x30
@@ -39,29 +41,3 @@ URxvt.loginShell: true
 URxvt.lineSpace: 0
 
 ! }}}
-
-
-! ------------------------------------------------------------------------------
-! ROFI Color theme
-! Copyright: 2017 leofa
-! ------------------------------------------------------------------------------
-! "Color scheme for normal row" Set from: File
-rofi.color-normal:                   argb:0383c4a, #c4cbd4, argb:96404552, #4084d6, #f9f9f9
-! "Color scheme for urgent row" Set from: File
-rofi.color-urgent:                   argb:02d303b, #cc6666, argb:e52d303b, #a54242, #f9f9f9
-! "Color scheme for active row" Set from: File
-rofi.color-active:                   argb:02d303b, #b5bd68, argb:e42d303b, #8c9440, #f9f9f9
-! "Color scheme window" Set from: File
-rofi.color-window:                   argb:f22d303b
-! "Separator style (none, dash, solid)" Set from: XResources
-rofi.separator-style:                none
-rofi.font:                           Hack 12
-
-! lazy.spawn("rofi -combi-mode window,drun -show combi -modi")
-
-! "Enabled modi" Set from: Default
-rofi.modi:                           combi
-! "Set the modi to combine in combi mode" Set from: Default
-rofi.combi-modi:                     window,drun
-! "Set the matching algorithm. (normal, regex, glob, fuzzy)" Set from: Default
-rofi.matching:                       fuzzy

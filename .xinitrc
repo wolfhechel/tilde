@@ -1,11 +1,11 @@
 #!/bin/sh
 
-setxkbmap -option "lv3:alt_switch,ctrl:nocaps" se
+setxkbmap -option "ctrl:nocaps" se
 
-xmodmap ~/.Xmodmap
+[ -f $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap
 
-[[ -f $HOME/.Xresources ]] && xrdb -merge $HOME/.Xresources
+[ -f $HOME/.Xresources ] && xrdb -merge $HOME/.Xresources
 
-[[ -f $HOME/.fehbg ]] && source $HOME/.fehbg
+[ -f $HOME/.fehbg ] && source $HOME/.fehbg
 
-exec qtile
+exec dwm
