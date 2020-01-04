@@ -6,6 +6,28 @@
 
 config_version: 2
 settings:
+  colors.tabs.bar.bg:
+    global: '#47484a'
+  colors.tabs.even.bg:
+    global: '#47484a'
+  colors.tabs.indicator.start:
+    global: '#0000aa'
+  colors.tabs.indicator.stop:
+    global: '#00aa00'
+  colors.tabs.odd.bg:
+    global: '#47484a'
+  colors.tabs.selected.even.bg:
+    global: '#9bebc3'
+  colors.tabs.selected.even.fg:
+    global: '#47484a'
+  colors.tabs.selected.odd.bg:
+    global: '#9bebc3'
+  colors.tabs.selected.odd.fg:
+    global: '#47484a'
+  content.canvas_reading:
+    global: false
+  content.webgl:
+    global: false
   fonts.completion.category:
     global: bold 10pt Hack-Regular
   fonts.completion.entry:
@@ -30,5 +52,7 @@ settings:
     global: 13pt Hack-Regular
   fonts.tabs:
     global: 13pt Hack-Regular
-  fonts.web.family.cursive:
-    global: null
+  hints.border:
+    global: 0px
+  tabs.favicons.show:
+    global: never

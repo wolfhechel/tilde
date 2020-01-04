@@ -9,8 +9,8 @@ Xft.hintstyle: hintfull
 ! URxvt {{{
 
 URxvt*scrollBar: false
-URxvt*background: #222222
-URxvt*foreground: #cccccc
+URxvt*background: #47484a
+URxvt*foreground: #fad8d8
 URxvt*colorUL: #86a2b0
 
 URxvt*color0:  #2e3236
