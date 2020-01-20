@@ -6,6 +6,32 @@
 
 config_version: 2
 settings:
+  auto_save.session:
+    global: true
+  backend:
+    global: webengine
+  colors.downloads.bar.bg:
+    global: '#47484a'
+  colors.downloads.error.bg:
+    global: red
+  colors.downloads.error.fg:
+    global: white
+  colors.downloads.start.bg:
+    global: '#0000aa'
+  colors.downloads.start.fg:
+    global: white
+  colors.downloads.stop.bg:
+    global: '#00aa00'
+  colors.hints.bg:
+    global: '#47484a'
+  colors.hints.fg:
+    global: white
+  colors.hints.match.fg:
+    global: '#9bebc3'
+  colors.statusbar.insert.bg:
+    global: darkgreen
+  colors.statusbar.normal.bg:
+    global: '#47484a'
   colors.tabs.bar.bg:
     global: '#47484a'
   colors.tabs.even.bg:
@@ -26,6 +52,9 @@ settings:
     global: '#47484a'
   content.canvas_reading:
     global: false
+  content.notifications:
+    https://porndoe.com: false
+    https://www.reddit.com: false
   content.webgl:
     global: false
   fonts.completion.category:
@@ -37,9 +66,9 @@ settings:
   fonts.downloads:
     global: 10pt Hack-Regular
   fonts.hints:
-    global: 10pt Hack-Bold
+    global: 13pt Hack-Bold
   fonts.keyhint:
-    global: 10pt Hack-Regular
+    global: 13pt Hack-Regular
   fonts.messages.error:
     global: 10pt Hack-Regular
   fonts.messages.info:
