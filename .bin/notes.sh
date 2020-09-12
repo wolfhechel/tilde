@@ -1,0 +1,131 @@
+#!/bin/sh
+
+#######
+# TODO
+# [ ] Add delete command
+# [ ] Add encrypt command
+# [ ] Add decrypt command
+# [ ] Add message prompt when key-id is not found
+#######
+
+notes_dir=~/.local/notes
+
+edit_note="Edit"
+delete_note="Delete"
+encrypt_note="Encrypt"
+decrypt_note="Decrypt"
+
+selected=$((
+    for note in "$(ls ${notes_dir})"; do
+        echo "${note}"
+    done
+) | rofi -dmenu -lines 40 -p Note)
+
+if [ -z "${selected}" ]; then
+    exit
+fi
+
+if [ "${selected##*.}" == "gpg" ]; then
+    ENCRYPTED=1
+else
+    ENCRYPTED=0
+fi
+
+note="${notes_dir}/${selected}"
+out="${note}"
+
+if [ -f "$out" ]; then
+    action=$((
+        echo $edit_note
+        echo $delete_note
+        
+        if [ $ENCRYPTED == 1 ]; then
+            echo $decrypt_note
+        else
+            echo $encrypt_note
+        fi
+    )| rofi -dmenu -lines 40 -p "${selected}")
+else
+    action=$edit_note
+fi
+
+encrypt() {
+    in="$1"
+    out="$2"
+
+    gpg -r "$(cat ~/.config/notes-gpg-key-id)" \
+        -o "${out}" \
+        -e "${in}"
+}
+
+decrypt() {
+    in="$1"
+    out="$2"
+
+    gpg -o "${out}" -d "${in}"
+}
+
+case $action in
+
+$edit_note)
+    if [ $ENCRYPTED == 1 ]; then
+        out=$(mktemp -u)
+
+        if [ -f "${note}" ]; then
+            decrypt "$note" "$out"
+        fi
+    fi
+
+    gvim "${out}" --nofork
+
+    if [ $ENCRYPTED == 1 ] && [ -f "${out}" ]; then
+        if [ -f "${note}" ]; then
+            mv "${note}"{,.orig}
+        fi
+
+        gpg -r "$(cat ~/.config/notes-gpg-key-id)" \
+            -o "${note}" \
+            -e "${out}"
+
+        if [ $? -eq 0 ]; then
+            # Successfully encrypted
+            rm "${note}".orig
+        else
+            # Failed to save
+            mv "${note}"{.orig,}
+        fi
+
+        rm ${out}
+    fi
+
+    ;;
+
+$delete_note)
+    # Should confirm
+    yesno=$((
+        echo yes
+        echo no
+    ) | rofi -dmenu -lines 2 -p "Delete ${selected}?")
+
+    if [ "$yesno" == "yes" ]; then
+        rm $note
+    fi
+
+    ;;
+
+$decrypt_note)
+    mv_note="${notes_dir}/${selected%.*}"
+
+    decrypt "${note}" "${mv_note}"
+    rm "${note}"
+
+    ;;
+
+$encrypt_note)
+    encrypt "${note}" "${note}.gpg"
+    rm "${note}"
+
+    ;;
+*)
+    ;;
+esac

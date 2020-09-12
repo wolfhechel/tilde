@@ -31,9 +31,9 @@ URxvt*color14: #34e2e2
 URxvt*color15: #eeeeec
 
 ! Using Hack font
-URxvt*font:         xft:Hack-Regular:pixelsize=15
-URxvt*boldFont:     xft:Hack-Bold:pixelsize=15
-URxvt*italicFont:   xft:Hack-RegularOblique:pixelsize=15
+URxvt*font:         xft:Iosevka Term:style=Regular:pixelsize=16
+URxvt*boldFont:     xft:Iosevka Term:style=Bold:pixelsize=16
+URxvt*italicFont:   xft:Iosevka Term:style=Oblique:pixelsize=16
 
 URxvt.depth:    32
 URxvt.geometry: 90x30
