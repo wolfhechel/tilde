@@ -1,0 +1,20 @@
+[global]
+geometry=400x0-1+25
+padding=5
+horizontal_padding=5
+font=Iosevka Bold 13
+ellipsis=end
+format="%s\n%b"
+word_wrap=true
+
+[urgency_low]
+background="#47484a"
+foreground="#9bebc3"
+
+[urgency_normal]
+background="#47484a"
+foreground="#9bebc3"
+
+[urgency_critical]
+background="#47484a"
+foreground="#f15d5d"
