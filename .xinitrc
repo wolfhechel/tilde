@@ -13,4 +13,9 @@ setxkbmap -option "ctrl:nocaps" se
 # Android Studio fix on DWM
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-exec dwm
+# Set adaptable QT theme
+export QT_QPA_PLATFORMTHEME=qt5ct
+
+systemctl --user start xss-lock.service
+
+exec dwm &> $HOME/.local/dwm.log

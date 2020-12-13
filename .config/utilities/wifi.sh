@@ -22,7 +22,7 @@ if [ -z "$selected" ]; then
     exit
 fi
 
-ssid=$(echo $selected | cut -d' ' -f2)
+ssid="$(echo $selected | cut -d' ' -f2)"
 
 security=$(echo $selected| cut -d' ' -f3 | tr -d '()')
 
@@ -48,4 +48,4 @@ else
     pass=""
 fi
 
-nmcli d wifi connect "$ssid" $pass &
+nmcli d wifi connect "$ssid" "$pass" &

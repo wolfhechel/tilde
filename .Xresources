@@ -30,7 +30,6 @@ URxvt*color13: #ad7fa8
 URxvt*color14: #34e2e2
 URxvt*color15: #eeeeec
 
-! Using Hack font
 URxvt*font:         xft:Iosevka Term:style=Regular:pixelsize=16
 URxvt*boldFont:     xft:Iosevka Term:style=Bold:pixelsize=16
 URxvt*italicFont:   xft:Iosevka Term:style=Oblique:pixelsize=16
@@ -39,5 +38,13 @@ URxvt.depth:    32
 URxvt.geometry: 90x30
 URxvt.loginShell: true
 URxvt.lineSpace: 0
+
+URxvt.perl-ext-common: default,clipboard,url-select,keyboard-select
+URxvt.url-launcher.launcher: /sbin/xdg-open
+URxvt.url-launcher.underline: true
+URxvt.matcher.button: 1
+URxvt.clipboard.autocopy: true
+URxvt.keysym.M-c: perl:clipboard:copy
+URxvt.keysym.M-v: perl:clipboard:paste
 
 ! }}}

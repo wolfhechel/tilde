@@ -8,6 +8,9 @@
 # [ ] Add message prompt when key-id is not found
 #######
 
+dmenu="rofi -dmenu -i -theme styles/notes"
+lines=20
+
 notes_dir=~/.local/notes
 
 edit_note="Edit"
@@ -15,11 +18,11 @@ delete_note="Delete"
 encrypt_note="Encrypt"
 decrypt_note="Decrypt"
 
-selected=$((
-    for note in "$(ls ${notes_dir})"; do
-        echo "${note}"
+selected="$((
+    IFS=$'\n';for note in $(cd ${notes_dir}; find . -type f); do
+        echo "${note#*/}"
     done
-) | rofi -dmenu -lines 40 -p Note)
+) | ${dmenu} -lines ${lines} -p Note)"
 
 if [ -z "${selected}" ]; then
     exit
@@ -44,7 +47,7 @@ if [ -f "$out" ]; then
         else
             echo $encrypt_note
         fi
-    )| rofi -dmenu -lines 40 -p "${selected}")
+    )| ${dmenu} -lines ${lines} -p "${selected}")
 else
     action=$edit_note
 fi
@@ -105,10 +108,10 @@ $delete_note)
     yesno=$((
         echo yes
         echo no
-    ) | rofi -dmenu -lines 2 -p "Delete ${selected}?")
+    ) | ${dmenu} -lines 2 -p "Delete ${selected}?")
 
     if [ "$yesno" == "yes" ]; then
-        rm $note
+        rm "$note"
     fi
 
     ;;

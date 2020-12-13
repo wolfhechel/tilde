@@ -8,16 +8,17 @@
  */
 
 configuration {
-  drun-display-format: "{icon} {name}";
+    drun-display-format: "{icon} {name}";
 	show-icons: true;
 	icon-theme: "Papirus";
 	location: 2;
 	fake-transparency: false;
 	hide-scrollbar: true;
 	bw: 0;
-  fullscreen: false;
-  show-icons: true;
-	terminal: "termite";
+	columns: 3;
+    fullscreen: false;
+    show-icons: true;
+    terminal: "termite";
 	sidebar-mode: false;
 }
 
