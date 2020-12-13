@@ -1,0 +1,10 @@
+[Unit]
+Description=switch-audio
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/sbin/bash /home/jonet/.config/switch-audio.sh
+
+[Install]
+WantedBy=graphical-session.target
