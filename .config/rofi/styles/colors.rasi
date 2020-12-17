@@ -1,7 +1,7 @@
 * {
     spacing:                     2;
-    dark:                        rgba ( 71, 72, 74, 100 % );
-    light:                       rgba ( 250, 216, 216, 100 % );
+    dark:                        #393939;
+    light:                       rgba ( 255, 255, 255, 100 % );
     green:                       rgba ( 155, 235, 195, 100 % );
     red:                         rgba ( 241, 93, 93, 100 % );
     blue:                        rgba ( 38, 139, 210, 100 % );
@@ -9,7 +9,7 @@
     background:                  var(dark);
 
     separatorcolor:              var(foreground);
-    border-color:                var(green);
+    border-color:                var(dark);
     background-color:            rgba ( 0, 0, 0, 0 % );
 
     lightfg:                     rgba ( 88, 104, 117, 100 % );

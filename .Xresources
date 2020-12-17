@@ -1,50 +1,97 @@
+! Colors {{{
+! -----------------------------------------------------------------------------
+! File: gruvbox-dark.xresources
+! Description: Retro groove colorscheme generalized
+! Author: morhetz <morhetz@gmail.com>
+! Source: https://github.com/morhetz/gruvbox-generalized
+! Last Modified: 6 Sep 2014
+! -----------------------------------------------------------------------------
+
+! hard contrast: *background: #1d2021
+*background: #282828
+! soft contrast: *background: #32302f
+*foreground: #ebdbb2
+! Black + DarkGrey
+*color0:  #282828
+*color8:  #928374
+! DarkRed + Red
+*color1:  #cc241d
+*color9:  #fb4934
+! DarkGreen + Green
+*color2:  #98971a
+*color10: #b8bb26
+! DarkYellow + Yellow
+*color3:  #d79921
+*color11: #fabd2f
+! DarkBlue + Blue
+*color4:  #458588
+*color12: #83a598
+! DarkMagenta + Magenta
+*color5:  #b16286
+*color13: #d3869b
+! DarkCyan + Cyan
+*color6:  #689d6a
+*color14: #8ec07c
+! LightGrey + White
+*color7:  #a89984
+*color15: #ebdbb2
+
+! rxvt-unicode-256 specific
+URxvt.color24:  #076678
+URxvt.color66:  #427b58
+URxvt.color88:  #9d0006
+URxvt.color96:  #8f3f71
+URxvt.color100: #79740e
+URxvt.color108: #8ec07c
+URxvt.color109: #83a598
+URxvt.color130: #af3a03
+URxvt.color136: #b57614
+URxvt.color142: #b8bb26
+URxvt.color167: #fb4934
+URxvt.color175: #d3869b
+URxvt.color208: #fe8019
+URxvt.color214: #fabd2f
+URxvt.color223: #ebdbb2
+URxvt.color228: #f2e5bc
+URxvt.color229: #fbf1c7
+URxvt.color230: #f9f5d7
+URxvt.color234: #1d2021
+URxvt.color235: #282828
+URxvt.color236: #32302f
+URxvt.color237: #3c3836
+URxvt.color239: #504945
+URxvt.color241: #665c54
+URxvt.color243: #7c6f64
+URxvt.color244: #928374
+URxvt.color245: #928374
+URxvt.color246: #a89984
+URxvt.color248: #bdae93
+URxvt.color250: #d5c4a1
+! }}}
+
 ! Fonts {{{
 Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb
 Xft.hintstyle: hintfull
-!Xft.dpi:       220
+Xft.dpi:       96
 ! }}}
 
-! URxvt {{{
-
-URxvt*scrollBar: false
-URxvt*background: #47484a
-URxvt*foreground: #fad8d8
-URxvt*colorUL: #86a2b0
-
-URxvt*color0:  #2e3236
-URxvt*color1:  #cc0000
-URxvt*color2:  #4e9a06
-URxvt*color3:  #c4a000
-URxvt*color4:  #3465a4
-URxvt*color5:  #75507b
-URxvt*color6:  #06989a
-URxvt*color7:  #d3d7cf
-URxvt*color8:  #555753
-URxvt*color9:  #ef2929
-URxvt*color10: #8ae234
-URxvt*color11: #fce94f
-URxvt*color12: #729fcf
-URxvt*color13: #ad7fa8
-URxvt*color14: #34e2e2
-URxvt*color15: #eeeeec
-
-URxvt*font:         xft:Iosevka Term:style=Regular:pixelsize=16
-URxvt*boldFont:     xft:Iosevka Term:style=Bold:pixelsize=16
-URxvt*italicFont:   xft:Iosevka Term:style=Oblique:pixelsize=16
-
+! rxvt-unicode {{{
+URxvt*font:                 xft:Iosevka Term:regular:size=12
+URxvt*imFont:               xft:Iosevka Term:italic:size=12
+URxvt*boldFont:             xft:Iosevka Term:bold:size=12
+URxvt*italicFont:           xft:Iosevka Term:italic:size=12
+URxvt*boldItalicFont:       xft:Iosevka Term:bold italic:size=12
 URxvt.depth:    32
 URxvt.geometry: 90x30
 URxvt.loginShell: true
 URxvt.lineSpace: 0
-
+URxvt*scrollBar: false
 URxvt.perl-ext-common: default,clipboard,url-select,keyboard-select
 URxvt.url-launcher.launcher: /sbin/xdg-open
 URxvt.url-launcher.underline: true
 URxvt.matcher.button: 1
 URxvt.clipboard.autocopy: true
-URxvt.keysym.M-c: perl:clipboard:copy
-URxvt.keysym.M-v: perl:clipboard:paste
 
 ! }}}
