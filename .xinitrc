@@ -8,8 +8,6 @@ setxkbmap -option "ctrl:nocaps" se
 
 [ -f $HOME/.fehbg ] && source $HOME/.fehbg
 
-(bash $HOME/.config/statusbar.sh | while read LINE; do xsetroot -name "${LINE}" &>/dev/null; done) &
-
 # Android Studio fix on DWM
 export _JAVA_AWT_WM_NONREPARENTING=1
 
@@ -18,4 +16,9 @@ export QT_QPA_PLATFORMTHEME=qt5ct
 
 systemctl --user start xss-lock.service
 
+$HOME/.config/statusbar.sh &
+STATUSBAR_PID=$!
+
 exec dwm &> $HOME/.local/dwm.log
+
+kill $STATUSBAR_PID
