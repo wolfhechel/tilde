@@ -1,7 +1,5 @@
 # Convenience aliases
 alias dj='./manage.py'
-alias djangoproject='django-admin.py startproject -e py,txt --template=https://github.com/wolfhechel/django-project-boilerplate/archive/master.zip'
-alias djangoapp='django-admin.py startapp -e py --template=https://github.com/wolfhechel/django-application-boilerplate/archive/master.zip'
 alias mkdir='mkdir -p'
 
 # Play it safe!

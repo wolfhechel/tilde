@@ -22,15 +22,10 @@
     fix-permissions = "!git diff -p | grep -E '^(diff|old mode|new mode)' | sed -e 's/^old/NEW/;s/^new/old/;s/^NEW/new/' | git apply"
     purge = "clean -fdx"
     graph = log --graph --full-history --all --color --pretty=format:'%x1b[31m%h%x09%x1b[32m %C(white)- %d%x1b[0m%x20%s %Cgreen(%cr) %C(bold blue)%Creset' --date=relative
-    flow = "git-flow"
-    feature = flow feature
-    release = flow release
-    publish ="!git-flow feature publish `git rev-parse --abbrev-ref HEAD | cut -d'/' -f2`"
-    hotfix = flow hotfix
-    support = flow support
     contributors = shortlog --summary --numbered
     branches = branch -a
     tags = tag -l
+    ls = ls-files
     remotes = remote -v
     df = -c core.fileMode=false diff
     cm = commit -a
