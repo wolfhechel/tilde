@@ -1,10 +1,3 @@
-# Git abbreviations
-alias checkout="git checkout"
-alias rebase="git rebase"
-alias merge="git merge"
-alias pull="git pull"
-alias push="git push"
-
 # Convenience aliases
 alias dj='./manage.py'
 alias djangoproject='django-admin.py startproject -e py,txt --template=https://github.com/wolfhechel/django-project-boilerplate/archive/master.zip'
@@ -48,7 +41,4 @@ if which thefuck &> /dev/null; then
     eval $(thefuck --alias)
 fi
 
-# Nevermore
-for l in {a..z}; do
-    alias g${l}t=git
-done
+alias tilde='git --git-dir=$HOME/.tilde.git --work-tree=$HOME'
