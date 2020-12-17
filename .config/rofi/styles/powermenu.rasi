@@ -18,7 +18,7 @@ window {
     width:                          12%;
     location:                       east;
     x-offset:                       0;
-    y-offset:                       20px;
+    y-offset:                       24px;
 }
 
 prompt {

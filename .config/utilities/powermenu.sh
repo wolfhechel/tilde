@@ -42,7 +42,8 @@ case $chosen in
         xset s activate
         ;;
     $logout)
-        pkill -SIGTERM -f dwm
+        wmctrl -lix | cut -d ' ' -f 1 | xargs -i% wmctrl -i -c %
+        loginctl terminate-session $XDG_SESSION_ID
         ;;
     $bluetooth)
         bluetoothctl power $bt_toggle
