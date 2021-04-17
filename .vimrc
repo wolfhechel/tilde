@@ -3,6 +3,8 @@ set nocompatible
 
 set runtimepath+=~/.cache/vim/dein/repos/github.com/Shougo/dein.vim
 
+runtime ftplugin/man.vim
+
 if dein#load_state('~/.cache/vim/dein')
     call dein#begin('~/.cache/vim/dein')
 
@@ -12,15 +14,18 @@ if dein#load_state('~/.cache/vim/dein')
     call dein#add('ctrlpvim/ctrlp.vim')
     call dein#add('vim-airline/vim-airline')
     call dein#add('vim-airline/vim-airline-themes')
+    call dein#add('jiangmiao/auto-pairs')
+    call dein#add('frazrepo/vim-rainbow')
+    call dein#add('preservim/tagbar')
+    call dein#add('preservim/nerdtree')
+    call dein#add('tpope/vim-commentary')
+    call dein#add('tpope/vim-surround')
 
     call dein#end()
     call dein#save_state()
 endif
 
-" Enable the filetype plugin, remain compatible with older versions
-if has('autocmd')
-    filetype plugin indent on
-endif
+filetype plugin indent on
 
 " Enable syntax highlighting, if possible
 if has('syntax') && !exists('g:syntax_on')
@@ -41,6 +46,12 @@ set background=dark
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme = 'gruvbox'
 
+" Enable rainbow globally
+let g:rainbow_active = 1
+
+" Focus Tagbar when toggling
+let g:tagbar_autofocus = 1
+
 " Buffer options
 set hidden            " Switch between buffers without saving
 set autowrite         " Write old file when switching between files
@@ -60,7 +71,7 @@ if v:version >= 730
 endif
 
 " Ignored file globs when expanding wildcards
-set wildignore=.git,*.swp,*.bak,*.pyc,*.class,*.o
+set wildignore=.git,*.swp,*.bak,*.pyc,*.class,*.o,,
 
 " Search options
 set incsearch  " Show search matches as we're typing
@@ -80,17 +91,10 @@ set shiftround    " Use multiples of shiftwidth when <> indenting
 " Text wrapping options
 set textwidth=79        " Line max-length hint
 set wrap                " Wrap text
-set formatoptions=qrnl  " Options for text-wrapping/-formatting (:help fo-tables)
-
-if v:version >= 704 || (v:version == 703 && has('patch541'))
-    " Merge comment lines
-    set formatoptions+=j 
-endif
+set formatoptions=qrnlj " Options for text-wrapping/-formatting (:help fo-tables)
 
 " Interface options
 set number        " Line numbering
-set ruler         " Shows current cursor position in lower right corner
-set showcmd       " Show command in bottom right portion of screen
 set laststatus=2  " Always show the status line
 set noshowmode    " We got vim-airline for this now
 set scrolloff=2   " Keep 2 lines margin top and bottom when scrolling
@@ -104,7 +108,7 @@ set listchars=tab:»»,eol:¶,trail:·,nbsp:% " Sets up some less obtrusive symb
 " Editing options
 set showmatch                  " Highlights matching paranthesis
 set backspace=indent,eol,start " Allow backspacing over linestops in insert mode
-set pastetoggle=<F2>           " Toggle paste with F2
+set pastetoggle=<F4>           " Toggle paste with F4
 set nomodeline                 " Disables modelines for security
 set cursorline                 " Highlights current line
 set foldenable                 " Enable folding
@@ -114,42 +118,95 @@ set foldenable                 " Enable folding
 " Set a sane leader key
 let mapleader=","
 
+nmap <F2> :NERDTreeToggle<CR>
+nmap <F3> :TagbarToggle<CR>
+
+nmap ö :
 " Space clears search highlights
 nnoremap <silent> <Space> :nohlsearch<CR>
 
 " Switch between buffers
-nnoremap <C-j> :bnext<CR>
-nnoremap <C-k> :bprev<CR>
+nnoremap <C-j> :bprev<CR>
+nnoremap <C-k> :bnext<CR>
 
 " Remap j and k to move line by line, even on long lines
 nnoremap j gj
 nnoremap k gk
 
-if has('autocmd')
-    " Marks characters spanning further than 79 on a single line
-    augroup vimrc_autocmds
-        au CursorMovedI,CursorMoved,BufRead * highlight OverLength ctermbg=darkgrey guibg=#592929
-        au CursorMovedI,CursorMoved,BufRead * match OverLength /\%79v.*/
-    augroup END
+" Mark characters spanning further than 79 characters on a single line
+highlight ColorColumn ctermbg=darkgrey
+call matchadd('ColorColumn', '\%79v.*', 100)
 
-    " Reload vimrc file after saving
-    augroup myvimrchooks
-        au!
-        au BufWritePost .vimrc source ~/.vimrc
-    augroup END
+augroup lastcursor
+    au!
 
-    " Disables visualbell, this is done here because the GUI has to be loaded
+    " Returning to last known cursor position
+    autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+augroup END
+
+" Reload vimrc file after saving
+augroup reloadvimrc
+    au!
+    au BufWritePost .vimrc source ~/.vimrc
+augroup END
+
+" Transparent editing of gpg encrypted files.
+augroup encrypted
+    au!
+    " First make sure nothing is written to ~/.viminfo while editing
+    " an encrypted file.
+    autocmd BufReadPre,FileReadPre      *.gpg set viminfo=
+    " We don't want a swap file, as it writes unencrypted data to disk
+    autocmd BufReadPre,FileReadPre      *.gpg set noswapfile
+    " Switch to binary mode to read the encrypted file
+    autocmd BufReadPre,FileReadPre      *.gpg set bin
+    autocmd BufReadPre,FileReadPre      *.gpg let ch_save = &ch|set ch=2
+    autocmd BufReadPre,FileReadPre      *.gpg let shsave=&sh
+    autocmd BufReadPre,FileReadPre      *.gpg let &sh='sh'
+    autocmd BufReadPre,FileReadPre      *.gpg let ch_save = &ch|set ch=2
+    autocmd BufReadPost,FileReadPost    *.gpg '[,']!gpg --decrypt --default-recipient-self 2> /dev/null
+    autocmd BufReadPost,FileReadPost    *.gpg let &sh=shsave
+    " Switch to normal mode for editing
+    autocmd BufReadPost,FileReadPost    *.gpg set nobin
+    autocmd BufReadPost,FileReadPost    *.gpg let &ch = ch_save|unlet ch_save
+    autocmd BufReadPost,FileReadPost    *.gpg execute ":doautocmd BufReadPost " . expand("%:r")
+    " Convert all text to encrypted text before writing
+    autocmd BufWritePre,FileWritePre    *.gpg set bin
+    autocmd BufWritePre,FileWritePre    *.gpg let shsave=&sh
+    autocmd BufWritePre,FileWritePre    *.gpg let &sh='sh'
+    autocmd BufWritePre,FileWritePre    *.gpg '[,']!gpg --encrypt --default-recipient-self 2>/dev/null
+    autocmd BufWritePre,FileWritePre    *.gpg let &sh=shsave
+    " Undo the encryption so we are back in the normal text, directly
+    " after the file has been written.
+    autocmd BufWritePost,FileWritePost  *.gpg silent u
+    autocmd BufWritePost,FileWritePost  *.gpg set nobin
+augroup END
+
+" Automatically change current directory to that of the file in the buffer
+au BufEnter * silent! lcd %:p:h  
+
+" Use YAML syntax for salt state files
+au BufRead,BufNewFile *.sls set ft=yaml ts=4 sts=4 sw=4
+
+" Groovy syntax for gradle files
+au BufRead,BufNewFile *.gradle setf groovy
+
+" Never expand tabs when editing Makefiles
+au FileType make setlocal noexpandtab
+
+" Autosave files on leaving buffer, leaving insert mode or lost focus
+au BufLeave,FocusLost,InsertLeave * silent! wall
+
+if has('gui')
+    " Set a decent font
+    set guifont=Noto\ Sans\ Mono\ 12
+
+    " Hide the toolbar, why would we want that?
+    set guioptions=Acd
+
+    " Disables visualbell
     au GUIEnter * set visualbell t_vb= 
-
-    " Automatically change current directory to that of the file in the buffer
-    au BufEnter * silent! lcd %:p:h  
-
-    au BufRead,BufNewFile *.sls set ft=yaml ts=4 sts=4 sw=4
-    au BufRead,BufNewFile *.gradle setf groovy
-
-    " Never expand tabs when editing Makefiles
-    au FileType make setlocal noexpandtab
-
-    " Autosave files on leaving buffer, leaving insert mode or lost focus
-    au BufLeave,FocusLost,InsertLeave * silent! wall
 endif

@@ -41,15 +41,45 @@ nv_temp() {
     nvidia-smi stats -d temp -c 1 | cut -d' ' -f8
 }
 
+nv_powermizer() {
+    case $(nvidia-settings -t -q \[gpu:0\]/GpuPowerMizerMode) in
+        0)  # Adaptive
+            echo "~"
+            ;;
+        1)  # Maximum
+            echo !
+            ;;
+        2)  # Auto
+            echo A
+            ;;
+        *)  # Unknonw
+            echo ?
+            ;;
+    esac
+}
+
+coretemp_hwmon=
+
+for file in /sys/class/hwmon/hwmon*/name; do
+    name=$(cat $file)
+
+    if [ "${name}" == "coretemp" ]; then
+        coretemp_hwmon=${file%/*}
+    fi
+done
+
 coretemp() {
-    echo $(cat /sys/class/hwmon/hwmon2/temp${1}_input) / 1000 | bc
+    echo $(cat ${coretemp_hwmon}/temp${1}_input) / 1000 | bc
 }
 
 line() {
-    echo "CPU: $(coretemp 1) | GPU: $(nv_temp) | $(wifi_ssid wlp2s0) ($(wifi_signal_level wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(date +%H:%M)"
+    echo "CPU: $(coretemp 1) | GPU: $(nv_temp) [$(nv_powermizer)] | $(wifi_ssid wlp2s0) ($(wifi_signal_level wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(date +%H:%M)"
 }
 
 while true; do 
-    xsetroot -name "$(line)"
-    sleep 1
+    if ! xsetroot -name "$(line)"; then
+        exit
+    else
+        sleep 1
+    fi
 done

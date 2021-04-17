@@ -1,0 +1,44 @@
+#!/bin/sh
+# Adopted from sx and udm
+
+cleanup() { 
+    if kill -0 "$pid" 2> /dev/null; then
+        kill "$pid"
+        wait "$pid"
+        xorg=$?
+    fi
+
+    if ! stty "$stty"; then
+        stty sane
+    fi
+
+    xauth remove :"$tty"
+    vlock
+}
+
+stty=$(stty -g)
+tty=$(tty)
+tty=${tty#/dev/tty}
+
+export XDG_SESSION_TYPE=x11
+export XAUTHORITY="${XDG_RUNTIME_DIR-/run/user/$( id -u )}/xauthority"
+
+touch $XAUTHORITY
+
+xauth add :"$tty" MIT-MAGIC-COOKIE-1 $(mcookie)
+
+for signal in ABRT HUP INT TERM QUIT; do
+    trap 'cleanup; trap - "$signal"; kill -s "$signal" "$$"' "$signal"
+done
+
+# Xorg will check whether it inherited a USR1 with a disposition of SIG_IGN and
+# use this state to reply back to the parent process with its own USR1.
+# This is done to indicate that the server is ready to accept connections.
+# Taking advantage of this feature allows launching the client directly from a
+# USR1 signal trap which obviates the need to poll for server readiness.
+trap 'DISPLAY=:$tty exec sh ~/.xinitrc & wait "$!"' USR1
+
+(trap '' USR1 && exec Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
+wait "$pid"
+
+cleanup

@@ -70,19 +70,21 @@ URxvt.color250: #d5c4a1
 ! }}}
 
 ! Fonts {{{
+Xft.autohint: false
+Xft.lcdfilter: lcddefault
 Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb
-Xft.hintstyle: hintfull
+Xft.hintstyle: hintslight
 Xft.dpi:       96
 ! }}}
 
 ! rxvt-unicode {{{
-URxvt*font:                 xft:Iosevka Term:regular:size=12
-URxvt*imFont:               xft:Iosevka Term:italic:size=12
-URxvt*boldFont:             xft:Iosevka Term:bold:size=12
-URxvt*italicFont:           xft:Iosevka Term:italic:size=12
-URxvt*boldItalicFont:       xft:Iosevka Term:bold italic:size=12
+URxvt*font:                 xft:Noto Sans Mono:regular:size=11
+URxvt*imFont:               xft:Noto Sans Mono:italic:size=11
+URxvt*boldFont:             xft:Noto Sans Mono:bold:size=11
+URxvt*italicFont:           xft:Noto Sans Mono:italic:size=11
+URxvt*boldItalicFont:       xft:Noto Sans Mono:bold italic:size=11
 URxvt.depth:    32
 URxvt.geometry: 90x30
 URxvt.loginShell: true

@@ -3,7 +3,7 @@
 import sys
 import subprocess
 import urllib.parse
-
+import os
 
 class PinEntryRofi:
 
@@ -58,7 +58,7 @@ class PinEntryRofi:
         self._running = False
 
     def handle_setprompt(self, prompt):
-        self._prompt = prompt.replace(':', '')
+        self._prompt = prompt.replace(':', '').strip()
 
     def handle_seterror(self, error):
         self._prompt_error = error
@@ -83,6 +83,7 @@ class PinEntryRofi:
                 '-lines', '0',
                 '-disable-history',
                 '-markup-rows'
+
             ],
             capture_output=True, 
             encoding='utf-8',
