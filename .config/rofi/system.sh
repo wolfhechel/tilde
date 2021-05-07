@@ -6,18 +6,6 @@
 
 # root level of the menu, info
 main() {
-    if wifi_power_on; then
-        wifi_icon=network-wireless
-    else
-        wifi_icon=network-wireless-offline-symbolic
-    fi
-
-    if bt_power_on; then
-        bt_icon=bluetooth-symbolic
-    else
-        bt_icon=bluetooth-disabled-symbolic
-    fi
-    
     last_upgrade_time=$(grep "\[PACMAN\] starting full system upgrade" /var/log/pacman.log | tail -1 | grep -oP '\[\K[^\]]+' | head -1)
     last_upgrade_utime=$(date '+%s' -d "$last_upgrade_time")
     current_utime=$(date '+%s')
@@ -34,8 +22,23 @@ main() {
 
     echo -en "\0prompt\x1fSystem\n"
     echo -en "\0message\x1f$msg\n"
+
+    if wifi_power_on; then
+        wifi_icon=network-wireless
+    else
+        wifi_icon=network-wireless-offline-symbolic
+    fi
+
     echo -en "Wi-Fi\0icon\x1f$wifi_icon\x1finfo\x1fwifi_main\n"
+
+    if bt_power_on; then
+        bt_icon=bluetooth-symbolic
+    else
+        bt_icon=bluetooth-disabled-symbolic
+    fi
+
     echo -en "Bluetooth\0icon\x1f$bt_icon\x1finfo\x1fbluetooth_main\n"
+    echo -en "Power Options\0icon\x1fgnome-power-manager-symbolic\x1finfo\x1fpoweroptions_main\n"
     echo -en "Lock\0icon\x1fsystem-lock-screen-symbolic\x1finfo\x1fxset s activate\n"
     echo -en "Logout\0icon\x1fsystem-log-out-symbolic\x1finfo\x1flogout\n"
     echo -en "Suspend\0icon\x1fsystem-suspend-symbolic\x1finfo\x1fsystemctl suspend\n"
@@ -294,6 +297,30 @@ display() {
     esac
 
     xrandr $args
+}
+
+# Power Options Menu
+
+poweroptions_main() {
+    echo -en "\0prompt\x1fPower Options\n"
+    echo -en "\0message\x1f\n"
+    echo -en "\0no-custom\x1ftrue\n"
+
+    echo -en "...\0info\x1fmain\x1ficon\x1fup\n"
+    echo -en "GPU\0info\x1fpowermizer_main\n"
+}
+
+## Powermizer stuff
+powermizer_main() {
+    echo -en "...\0info\x1fpoweroptions_main\x1ficon\x1fup\n"
+    echo -en "\0prompt\x1fGPU\n"
+    echo -en "Adaptive\0info\x1fpowermizer_set 0\n"
+    echo -en "Maximum\0info\x1fpowermizer_set 1\n"
+    echo -en "Auto\0info\x1fpowermizer_set 2\n"
+}
+
+powermizer_set() {
+    nvidia-settings -a \[gpu:0\]/GpuPowerMizerMode=$1 &>/dev/null
 }
 
 if [ $ROFI_RETV -eq 0 ]; then

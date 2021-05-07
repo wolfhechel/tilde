@@ -52,7 +52,7 @@ nv_powermizer() {
         2)  # Auto
             echo A
             ;;
-        *)  # Unknonw
+        *)  # Unknown
             echo ?
             ;;
     esac

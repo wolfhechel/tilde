@@ -3,10 +3,12 @@
 declare -A feeds=(
     [Dagens Nyheter]="http://www.dn.se/nyheter/m/rss/"
     [SVT]="http://www.svt.se/nyheter/rss.xml"
-    [Aftonbladet]="http://www.aftonbladet.se/rss.xml"
+    [Aftonbladet]="https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/"
     [Expressen]="http://expressen.se/rss/nyheter"
     [Sydsvenskan]="http://www.sydsvenskan.se/rss.xml?latest"
     [Blankspot]="http://blankspot.se/feed/"
+    [The Guardian]="https://www.theguardian.com/world/rss"
+    [Al Jazeera]="https://www.aljazeera.com/xml/rss/all.xml"
 )
 
 xmlgetnext() {
