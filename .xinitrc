@@ -5,9 +5,6 @@ for xinitrc in /etc/X11/xinit/xinitrc.d/*; do
     . $xinitrc
 done
 
-# Use caps as ctrl, because why caps
-setxkbmap -option "ctrl:nocaps" se
-
 # Load custom keymap
 [ -f $HOME/.Xmodmap ] && xmodmap $HOME/.Xmodmap
 

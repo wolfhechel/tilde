@@ -58,7 +58,7 @@ encrypt() {
 
     gpg --default-recipient-self \
         -o "$mv_note" -e "$note_path" &>/dev/null 2>&1 && \
-        rm $note_path
+        rm "$note_path"
 
     main
 }
