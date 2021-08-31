@@ -14,3 +14,20 @@ diemf()
     local search_proc=$1
     kill -9 $(ps aux | grep "${search_proc}" | grep -v grep | awk '{print $2}')
 }
+
+aur()
+{
+    (
+        cd $HOME/.local/packages
+
+        if [ ! -d "${1}" ]; then
+            git clone "https://aur.archlinux.org/${1}.git"
+            cd "${1}"
+        else
+            cd "${1}"
+            git pull
+        fi
+
+        makepkg -ic
+    )
+}
