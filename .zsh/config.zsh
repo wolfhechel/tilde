@@ -77,14 +77,6 @@ export GOPATH
 
 export PYTHONSTARTUP=$HOME/.pythonrc.py
 
-# Locale settings, always go English!
-LANG="en_US.UTF-8"
-LC_ALL="en_US.UTF-8"
-export LC_ALL LANG
-
 # Which is a bit different on a Mac
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
-
-# Set a more restrictive umask
-umask 0077

@@ -8,7 +8,6 @@ declare -a extra_confs=(
     prompt
     completion
     virtualenv
-    path
     zsh-autosuggestions/zsh-autosuggestions
     zsh-syntax-highlighting/zsh-syntax-highlighting
 )
