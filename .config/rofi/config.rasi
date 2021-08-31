@@ -1,5 +1,5 @@
 configuration {
-    modi: "drun,sys:~/.config/rofi/system.sh,rss:~/.config/rofi/rss.sh,notes:~/.config/rofi/notes.sh,file-browser";
+    modi: "drun,sys:~/.config/rofi/system.sh,rss:~/.config/rofi/rss.sh,notes:~/.config/rofi/notes.sh";
     font: "Noto Sans 15";
     show-icons: true;
     matching: "fuzzy";

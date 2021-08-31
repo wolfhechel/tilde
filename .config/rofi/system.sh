@@ -39,6 +39,7 @@ main() {
 
     echo -en "Bluetooth\0icon\x1f$bt_icon\x1finfo\x1fbluetooth_main\n"
     echo -en "Power Options\0icon\x1fgnome-power-manager-symbolic\x1finfo\x1fpoweroptions_main\n"
+    echo -en "Display\0icon\x1fvideo-display-symbolic\x1finfo\x1fxrandr_main\n"
     echo -en "Lock\0icon\x1fsystem-lock-screen-symbolic\x1finfo\x1fxset s activate\n"
     echo -en "Logout\0icon\x1fsystem-log-out-symbolic\x1finfo\x1flogout\n"
     echo -en "Suspend\0icon\x1fsystem-suspend-symbolic\x1finfo\x1fsystemctl suspend\n"
@@ -83,8 +84,6 @@ bluetooth_device() {
     else
         bluetoothctl connect "$address" &>/dev/null
     fi
-
-    bluetooth_main
 }
 
 
@@ -147,8 +146,6 @@ wifi_connect() {
     bssid="$1"
 
     nmcli d wifi connect $bssid &> /dev/null
-
-    wifi_main
 }
 
 wifi_password_prompt() {
@@ -168,8 +165,6 @@ wifi_connect_password() {
     bssid=$(cat $(wifi_bssid_tmp))
 
     nmcli d wifi connect $bssid password "$password" &> /dev/null
-
-    wifi_main
 }
 
 wifi_rescan() {
@@ -242,62 +237,6 @@ wifi_main() {
     done
 }
 
-# xrandr
-# TODO
-xrandr_mode() {
-    mode=`xrandr -q | sed -n -e "/$1/,/connected/ p" \
-          | tail -n+2 | head -n1 | tr -d '+*'`
-
-    resolution=`echo $mode | cut -d' ' -f1`
-
-    preferred_rate=0.0
-
-    for rate in `echo $mode | cut -d' ' -f2-`; do
-        if (( $(echo "$rate > $preferred_rate" | bc -l) )); then
-            preferred_rate=$rate
-        fi
-    done
-
-    echo --mode $resolution --rate $preferred_rate
-}
-
-display() {
-    local opts
-    local output=HDMI-1
-
-    off="Off"
-    only="Only"
-    mirror="Mirror"
-    left="Left"
-    right="Right"
-
-    opts="$off\n$only\n$mirror\n$left\n$right"
-
-
-    choice=$(echo -e $opts | $rofi_command -dmenu -selected-row 1)
-
-    args="--output eDP-1 $(xrandr_mode eDP-1) --output $output $(xrandr_mode HDMI-1)"
-
-    case $choice in
-        $off)
-            args="--output $output --off"
-            ;;
-        $mirror)
-            args="$args --same-as eDP-1"
-            ;;
-        $right)
-            args="$args --right-of eDP-1"
-            ;;
-        $left)
-            args="$args --left-of eDP-1"
-            ;;
-        $only)
-            args="--output eDP-1 --off --output $output $(xrandr_mode HDMI-1)"
-            ;;
-    esac
-
-    xrandr $args
-}
 
 # Power Options Menu
 
@@ -321,6 +260,63 @@ powermizer_main() {
 
 powermizer_set() {
     nvidia-settings -a \[gpu:0\]/GpuPowerMizerMode=$1 &>/dev/null
+}
+
+# Display Options
+
+xrandr_main() {
+    echo -en "\0prompt\x1fDisplay\n"
+    echo -en "\0message\x1f\n"
+    echo -en "\0no-custom\x1ftrue\n"
+
+    echo -en "...\0info\x1fmain\x1ficon\x1fup\n"
+    echo -en "Mirror\0info\x1fxrandr_mirror\n"
+    echo -en "Extend\0info\x1fxrandr_extend\n"
+    echo -en "External Only\0info\x1fxrandr_external_only\n"
+    echo -en "Internal Only\0info\x1fxrandr_internal_only\n"
+}
+
+xrandr_mode() {
+    mode=`xrandr -q | sed -n -e "/$1/,/connected/ p" \
+          | tail -n+2 | head -n1 | tr -d '+*'`
+
+    resolution=`echo $mode | cut -d' ' -f1`
+
+    preferred_rate=0.0
+
+    for rate in `echo $mode | cut -d' ' -f2-`; do
+        if (( $(echo "$rate > $preferred_rate" | bc -l) )); then
+            preferred_rate=$rate
+        fi
+    done
+
+    echo --mode $resolution --rate $preferred_rate
+}
+
+EXTERNAL_MONITOR=HDMI-1
+INTERNAL_MONITOR=eDP-1
+EXTERNAL_PLACEMENT="left-of"
+
+xrandr_mirror() {
+    xrandr --output $INTERNAL_MONITOR $(xrandr_mode $INTERNAL_MONITOR) \
+           --output $EXTERNAL_MONITOR $(xrandr_mode $EXTERNAL_MONITOR) \
+           --same-as $INTERNAL_MONITOR
+}
+
+xrandr_extend() {
+    xrandr --output $INTERNAL_MONITOR $(xrandr_mode $INTERNAL_MONITOR)\
+           --output $EXTERNAL_MONITOR $(xrandr_mode $EXTERNAL_MONITOR) \
+           --${EXTERNAL_PLACEMENT} $INTERNAL_MONITOR
+}
+
+xrandr_external_only() {
+    xrandr --output $EXTERNAL_MONITOR $(xrandr_mode $EXTERNAL_MONITOR) \
+           --output $INTERNAL_MONITOR --off
+}
+
+xrandr_internal_only() {
+    xrandr --output $INTERNAL_MONITOR $(xrandr_mode $INTERNAL_MONITOR) \
+           --output $EXTERNAL_MONITOR --off
 }
 
 if [ $ROFI_RETV -eq 0 ]; then
