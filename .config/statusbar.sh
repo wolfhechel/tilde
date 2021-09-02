@@ -72,8 +72,18 @@ coretemp() {
     echo $(cat ${coretemp_hwmon}/temp${1}_input) / 1000 | bc
 }
 
+bt_power() {
+    echo -en "BT "
+
+    if bluetoothctl show | grep "Powered: yes" &>/dev/null; then
+        echo "[on]"
+    else
+        echo "[off]"
+    fi
+}
+
 line() {
-    echo "CPU: $(coretemp 1) | GPU: $(nv_temp) [$(nv_powermizer)] | $(wifi_ssid wlp2s0) ($(wifi_signal_level wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(date +%H:%M)"
+    echo "CPU: $(coretemp 1) | GPU: $(nv_temp) [$(nv_powermizer)] | $(bt_power) | $(wifi_ssid wlp2s0) ($(wifi_signal_level wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(date +%H:%M)"
 }
 
 while true; do 
