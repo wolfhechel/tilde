@@ -1,39 +1,38 @@
 " Disables vi compatibility
 set nocompatible
 
-set runtimepath+=~/.cache/vim/dein/repos/github.com/Shougo/dein.vim
-
-runtime ftplugin/man.vim
-
-if dein#load_state('~/.cache/vim/dein')
-    call dein#begin('~/.cache/vim/dein')
-
-    call dein#add('~/.cache/vim/dein/repos/github.com/Shougo/dein.vim')
-
-    call dein#add('morhetz/gruvbox')
-    call dein#add('ctrlpvim/ctrlp.vim')
-    call dein#add('vim-airline/vim-airline')
-    call dein#add('vim-airline/vim-airline-themes')
-    call dein#add('jiangmiao/auto-pairs')
-    call dein#add('frazrepo/vim-rainbow')
-    call dein#add('preservim/tagbar')
-    call dein#add('preservim/nerdtree')
-    call dein#add('tpope/vim-commentary')
-    call dein#add('tpope/vim-surround')
-
-    call dein#end()
-    call dein#save_state()
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+call plug#begin('~/.vim/bundle')
+
+Plug 'VundleVim/Vundle.vim'
+Plug 'morhetz/gruvbox'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'jiangmiao/auto-pairs'
+Plug 'frazrepo/vim-rainbow'
+Plug 'preservim/nerdtree'
+Plug 'tpope/vim-commentary'
+Plug 'ycm-core/YouCompleteMe', { 'do': 'python install.py'}
+Plug 'tpope/vim-surround'
+Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'liuchengxu/vista.vim'
+Plug 'dense-analysis/ale'
+Plug 'jeetsukumaran/vim-pythonsense'
+
+call plug#end()
+
 filetype plugin indent on
+
+runtime ftplugin/man.vim
 
 " Enable syntax highlighting, if possible
 if has('syntax') && !exists('g:syntax_on')
     syntax enable
-endif
-
-if dein#check_install()
-    call dein#install()
 endif
 
 " Everybody needs a neat colorscheme
@@ -49,8 +48,11 @@ let g:airline_theme = 'gruvbox'
 " Enable rainbow globally
 let g:rainbow_active = 1
 
-" Focus Tagbar when toggling
-let g:tagbar_autofocus = 1
+" Disable ALE completion
+let g:ale_completion_enabled = 0
+
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_auto_trigger = 1
 
 " Buffer options
 set hidden            " Switch between buffers without saving
@@ -64,6 +66,7 @@ set lazyredraw        " Don't update the display while executing macros
 set history=1000      " Remember more commands and search history
 set undolevels=1000   " Deeper undo list
 set noautochdir       " Don't change working dir, use autocmd for that
+set splitbelow        " Split windows bellow
 
 if v:version >= 730
     set undofile                " Keep a persistent backup file
@@ -93,6 +96,10 @@ set textwidth=79        " Line max-length hint
 set wrap                " Wrap text
 set formatoptions=qrnlj " Options for text-wrapping/-formatting (:help fo-tables)
 
+" Folding options
+set foldmethod=indent
+set foldlevel=99
+
 " Interface options
 set number        " Line numbering
 set laststatus=2  " Always show the status line
@@ -104,6 +111,7 @@ set title         " Change the terminal's title
 set noerrorbells  " Don't beep on error 
 set list          " Show unprintable characters
 set listchars=tab:»»,eol:¶,trail:·,nbsp:% " Sets up some less obtrusive symbols
+set clipboard=unnamedplus " Yank to CLIPBOARD
 
 " Editing options
 set showmatch                  " Highlights matching paranthesis
@@ -112,18 +120,22 @@ set pastetoggle=<F4>           " Toggle paste with F4
 set nomodeline                 " Disables modelines for security
 set cursorline                 " Highlights current line
 set foldenable                 " Enable folding
+set wildmenu                   " Enable commandline completion
+set wildmode=full
 
 " Keymappings
-
-" Set a sane leader key
-let mapleader=","
-
-nmap <F2> :NERDTreeToggle<CR>
-nmap <F3> :TagbarToggle<CR>
-
+let mapleader="ä"
 nmap ö :
+
+nmap <Leader>a :NERDTreeToggle<CR>
+nmap <Leader>s :Vista<CR>
+nmap <leader>g :YcmCompleter GoToDefinition<CR>
+
 " Space clears search highlights
 nnoremap <silent> <Space> :nohlsearch<CR>
+
+" Ctrl+Space folds code
+nnoremap <silent> <space> za
 
 " Switch between buffers
 nnoremap <C-j> :bprev<CR>
@@ -132,6 +144,9 @@ nnoremap <C-k> :bnext<CR>
 " Remap j and k to move line by line, even on long lines
 nnoremap j gj
 nnoremap k gk
+
+" Unmap recording, it's probably really useful but wrong key
+map q <Nop>
 
 " Mark characters spanning further than 79 characters on a single line
 highlight ColorColumn ctermbg=darkgrey
@@ -200,6 +215,8 @@ au FileType make setlocal noexpandtab
 " Autosave files on leaving buffer, leaving insert mode or lost focus
 au BufLeave,FocusLost,InsertLeave * silent! wall
 
+au FileType python nnoremap <buffer> <C-r> :! python %<CR>
+
 if has('gui')
     " Set a decent font
     set guifont=Noto\ Sans\ Mono\ 12
@@ -210,3 +227,26 @@ if has('gui')
     " Disables visualbell
     au GUIEnter * set visualbell t_vb= 
 endif
+
+function RefactorName()
+    call inputsave()
+    let new_name = input('refactor: ')
+    call inputrestore()
+
+    execute ":YcmCompleter RefactorRename " . new_name .""
+endfunction
+
+nnoremap <Leader>r :call RefactorName()<CR>
+
+py3 << EOF
+import os
+import vim
+
+virtual_env = os.environ.get('VIRTUAL_ENV', None)
+
+if virtual_env:
+    interpreter = os.path.join(virtual_env, 'bin', 'python')
+
+    vim.command('let g:ycm_python_binary_path = "%s"' % interpreter)
+
+EOF
