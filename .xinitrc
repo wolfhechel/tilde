@@ -21,6 +21,9 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 export QT_STYLE_OVERRIDE=kvantum
 export GTK_THEME=Arc-Dark-solid
 
+# For socket activated rxvt
+export RXVT_SOCKET="$XDG_RUNTIME_DIR/urxvtd-$(uname -n)"
+
 # This is pretty much to load xss-lock
 systemctl --user start xss-lock.service
 
