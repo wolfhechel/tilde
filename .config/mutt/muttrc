@@ -1,0 +1,92 @@
+set realname = "Pontus Jensen Karlsson"
+set from = "pontus@jensenkarlsson.se"
+
+set mbox_type = Maildir
+set folder = ~/.local/mail
+
+set spoolfile = +INBOX
+set postponed = +Drafts
+set record = +Sent
+set trash = +Trash
+
+mailboxes =INBOX =Junk =Drafts =Sent =Trash =Archive
+
+set sendmail = "msmtp -a mailbox"
+
+set edit_headers = no
+set header_cache = ~/.cache/mutt/mailbox/header_cache
+set message_cachedir = ~/.cache/mutt/mailbox/message_cache
+
+set sort = reverse-threads
+set sort_aux = date-received
+
+set fast_reply = yes
+set include = yes
+
+set mailcap_path = ~/.config/mutt/mailcap
+auto_view text/html
+alternative_order text/plain text/html
+
+# Query setup
+set query_command = 'echo "" && notmuch address from:%s'
+set query_format="%4c %t %-70.70a %-70.70n %?e?(%e)?"
+
+macro index S "<shell-escape>sh ~/.config/mutt/sync-email.sh<enter>" "sync email"
+macro index,pager A "<save-message>+Archive <enter>" "Archive"
+
+set sidebar_visible
+set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
+#set sidebar_format = "%D%* [%N]%*"
+set mail_check_stats
+
+set recall = no
+
+# Disable linewrap markers
+set markers = false
+
+# Disable pauses while moving between foldes
+set sleep_time = 0
+
+# There's a delay on this which can be removed by specifying ESCDELAY=0 as env
+set abort_key = '<ESC>'
+
+# My PGP key
+set pgp_default_key = 0x6977EFCFCE97881B
+
+# Use GPG Made Easy for seamless gpg-agent integration
+set crypt_use_gpgme = yes
+
+# Verify the signature of a message when opened
+set crypt_verify_sig = yes
+
+# Automatically sign replies to signed messages
+set crypt_replysign = yes
+
+# Automatically encrypt replies to encrypted messages
+set crypt_replyencrypt = yes
+
+# Sign all outgoing messages
+set crypt_autosign = yes
+
+# And also automatically sign replies to encrypted messages
+set crypt_replysignencrypted = yes
+
+# Use experimental key validation over DNS.
+set crypt_use_pka = yes
+
+# https://datatracker.ietf.org/doc/draft-josefsson-openpgp-mailnews-header/
+my_hdr OpenPGP: url=https://jensenkarlsson.se/public.asc\;id=6977EFCFCE97881B
+
+# Encrypt postponed messages
+set postpone_encrypt = yes
+
+# Save encrypted copies of outgoing messages
+set pgp_self_encrypt = yes
+
+source vim-keys.rc
+source colors.rc
+
+# Hooks
+set timeout = 20
+startup-hook 'echo `sh ~/.config/mutt/sync-email.sh`'
+timeout-hook 'echo `sh ~/.config/mutt/sync-email.sh`'

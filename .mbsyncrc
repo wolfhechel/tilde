@@ -1,0 +1,22 @@
+IMAPStore mailbox-remote
+    Host imap.mailbox.org
+    Port 993
+    User pontus@jensenkarlsson.se
+    PassCmd "pass mailbox"
+    SSLType IMAPS
+    CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+MaildirStore mailbox-local
+    Subfolders Verbatim
+    Path ~/.local/mail/
+    Inbox ~/.local/mail/INBOX
+
+Channel mailbox
+    Far :mailbox-remote:
+    Near :mailbox-local:
+    Patterns *
+    SyncState *
+    Create Both
+    Expunge Both
+    MaxMessages 0
+

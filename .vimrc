@@ -200,6 +200,11 @@ augroup encrypted
     autocmd BufWritePost,FileWritePost  *.gpg set nobin
 augroup END
 
+" Emails composed in mutt
+augroup muttmail
+    autocmd BufRead,BufNewFile        *mutt-* setfiletype mail
+augroup END
+
 " Automatically change current directory to that of the file in the buffer
 au BufEnter * silent! lcd %:p:h  
 

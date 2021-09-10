@@ -82,8 +82,16 @@ bt_power() {
     fi
 }
 
+new_mail() {
+    notmuch count folder:INBOX AND tag:unread
+}
+
+date_() {
+    date "+%m/%d %H:%M"
+}
+
 line() {
-    echo "CPU: $(coretemp 1) | GPU: $(nv_temp) [$(nv_powermizer)] | $(bt_power) | $(wifi_ssid wlp2s0) ($(wifi_signal_level wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(date +%H:%M)"
+    echo "CPU: $(coretemp 1) | GPU: $(nv_temp) [$(nv_powermizer)] | $(bt_power) | $(wifi_ssid wlp2s0) ($(wifi_signal_level wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(new_mail) | $(date_)"
 }
 
 while true; do 
