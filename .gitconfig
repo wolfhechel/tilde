@@ -1,6 +1,7 @@
 [user]
     email = pontus@jensenkarlsson.se
     name = Pontus Jensen Karlsson
+	signingkey = 6977EFCFCE97881B
 
 [core]
     editor = vim
@@ -53,6 +54,9 @@
 [merge]
     # Include merge summaries in commit message
     log = true
+
+[commit]
+	gpgsign = true
 
 # URL Shorthans
 [url "git://github.com/"]
