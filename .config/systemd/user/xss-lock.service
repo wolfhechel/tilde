@@ -4,9 +4,8 @@ PartOf=graphical-session.target
 
 [Service]
 Type=simple
-Environment=XSECURELOCK_PASSWORD_PROMPT=time_hex
 Environment=XSECURELOCK_DIM_FPS=60
-ExecStart=/usr/bin/xss-lock -n /usr/lib/xsecurelock/dimmer -l -- xsecurelock
+ExecStart=/usr/bin/xss-lock -n /usr/lib/xsecurelock/dimmer -l -- sh %h/.config/locker.sh
 
 [Install]
 WantedBy=graphical-session.target
