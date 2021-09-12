@@ -1,11 +1,16 @@
 [global]
-geometry=400x0-1+25
+geometry=400x5+10+37
 padding=5
 horizontal_padding=5
 font=Noto Sans 13
 ellipsis=end
-format="%s\n%b"
+format="<b>%s</b>\n<span font='12'>%b</span>"
 word_wrap=true
+transparency = 20
+follow = keyboard
+icon_path = .config/dunst/icons/status/:.config/dunst/icons/devices/
+separator_height = 5
+separator_color = "#00000000"
 
 [urgency_low]
 background="#47484a"
