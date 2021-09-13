@@ -73,12 +73,10 @@ coretemp() {
 }
 
 bt_power() {
-    echo -en "BT "
-
     if bluetoothctl show | grep "Powered: yes" &>/dev/null; then
-        echo "[on]"
+        echo "1"
     else
-        echo "[off]"
+        echo "0"
     fi
 }
 
@@ -90,8 +88,38 @@ date_() {
     date "+%m/%d %H:%M"
 }
 
+function cpufreq() {
+    count=0
+    total=0
+
+    values="$(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq)"
+
+    min=$(echo $values | cut -d' ' -f1)
+    max=0
+
+    for hz in $values; do
+        if [ "$hz" -lt "$min" ]; then
+            min="$hz"
+        fi
+
+        if [ "$hz" -gt "$max" ]; then
+            max="$hz"
+        fi
+
+        total=$(echo $total+$hz/10^6| bc)
+        ((count++))
+    done
+
+    min=$(echo "scale=1; $min/10^6" | bc | xargs printf '%.1f')
+    max=$(echo "scale=1; $max/10^6" | bc | xargs printf '%.1f')
+
+    mean=$(echo "scale=1; $total/$count" | bc | xargs printf '%.1f')
+
+    echo $min $mean $max
+}
+
 line() {
-    echo "CPU: $(coretemp 1) | GPU: $(nv_temp) [$(nv_powermizer)] | $(bt_power) | $(wifi_ssid wlp2s0) ($(wifi_signal_level wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(new_mail) | $(date_)"
+    echo "$(cpufreq) | $(coretemp 1) | $(nv_temp) [$(nv_powermizer)] | $(bt_power) | $(wifi_ssid wlp2s0) ($(wifi_signal_level wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(new_mail) | $(date_)"
 }
 
 while true; do 
