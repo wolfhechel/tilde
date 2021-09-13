@@ -1,4 +1,5 @@
-autoload -U compinit && compinit
+fpath=(~/.zsh/comp $fpath)
+autoload -Uz compinit && compinit
 
 # Enable legacy bash compatible completion
 autoload bashcompinit && bashcompinit
@@ -11,6 +12,9 @@ _bash_completions=(
 for comp_script in ${_bash_completions}; do
     [ -f $comp_script ] && source $comp_script
 done
+
+# Autocomplete tilde alias
+compdef _git tilde
 
 # Expands aliases AFTER completion, making aliases distinct commands
 # setopt complete_aliases
