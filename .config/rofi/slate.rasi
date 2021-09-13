@@ -1,3 +1,10 @@
+configuration {
+    show-icons: true;
+    icon-theme: "Papirus-Dark";
+    display-drun: "Run";
+    font: "Noto Sans 15";
+}
+
 * {
   background-color: #282C33;
   border-color: #2e343f;
@@ -21,9 +28,9 @@ prompt {
 }
 
 textbox {
-  background-color: #2e343f;
+  background-color: @border-color;
   border: 0 0 1px 0;
-  border-color: #282C33;
+  border-color: @background-color;
   padding: 8px 16px;
 }
 
@@ -36,11 +43,16 @@ listview {
   scrollbar: false;
   dynamic: true;
   fixed-height: false;
+  lines: 8;
 }
 
 element {
   border: 0 0 1px 0;
   padding: 16px;
+}
+
+element selected {
+  background-color: @border-color;
 }
 
 element-icon {
@@ -56,8 +68,4 @@ element-text {
   expand: true;
   vertical-align: 0.5;
   margin: 0 0 0 10px;
-}
-
-element selected {
-  background-color: #2e343f;
 }

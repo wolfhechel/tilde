@@ -14,6 +14,7 @@ is_encrypted() {
 main() {
     echo -en "\0prompt\x1fNote\n"
     echo -en "\0message\x1f\n"
+    echo -en "\0use-hot-keys\x1ftrue\n"
     IFS=$'\n'; for note in $(cd $notes_dir; find . -type f); do
         note="${note#*/}"
 
