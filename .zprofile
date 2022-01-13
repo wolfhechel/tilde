@@ -25,7 +25,4 @@ fi
 # Set a more restrictive umask
 umask 0077
 
-SUDO_ASKPASS=$HOME/.config/sudo-askpass.sh
-
 export PATH
-export SUDO_ASKPASS
