@@ -3,7 +3,6 @@ configuration {
     matching: "fuzzy";
     sort: true;
     sorting-method: "fzf";
-    theme: "slate";
     kb-clear-line: "Alt+BackSpace";
     kb-move-front: "Alt+H";
     kb-move-end: "Alt+L";
@@ -18,3 +17,5 @@ configuration {
     kb-row-up: "Alt+k,Up";
     kb-cancel: "Alt+q,Escape";
 }
+
+@theme "slate"
