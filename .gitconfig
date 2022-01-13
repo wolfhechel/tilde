@@ -1,7 +1,7 @@
 [user]
     email = pontus@jensenkarlsson.se
     name = Pontus Jensen Karlsson
-	signingkey = 6977EFCFCE97881B
+    signingkey = 0C0E2ED01AA32690
 
 [core]
     editor = vim
