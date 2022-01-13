@@ -74,6 +74,16 @@ set crypt_replysignencrypted = yes
 # Use experimental key validation over DNS.
 set crypt_use_pka = yes
 
+ignore *
+unignore From \
+         To \
+         Subject \
+         Date \
+         Delivered-To \
+         Return-Path \
+         DKIM-Signature \
+
+
 # https://datatracker.ietf.org/doc/draft-josefsson-openpgp-mailnews-header/
 my_hdr OpenPGP: url=https://jensenkarlsson.se/public.asc\;id=6977EFCFCE97881B
 
