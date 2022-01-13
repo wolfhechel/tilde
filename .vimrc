@@ -8,7 +8,6 @@ endif
 
 call plug#begin('~/.vim/bundle')
 
-Plug 'VundleVim/Vundle.vim'
 Plug 'morhetz/gruvbox'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'vim-airline/vim-airline'
@@ -23,6 +22,9 @@ Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'liuchengxu/vista.vim'
 Plug 'dense-analysis/ale'
 Plug 'jeetsukumaran/vim-pythonsense'
+Plug 'junegunn/fzf.vim'
+Plug 'mattn/emmet-vim'
+Plug 'pangloss/vim-javascript'
 
 call plug#end()
 
@@ -54,6 +56,8 @@ let g:ale_completion_enabled = 0
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_auto_trigger = 1
 
+" Avoid having autopairs ruin my letters
+let g:AutoPairsShortcutFastWrap = "<C-f>"
 " Buffer options
 set hidden            " Switch between buffers without saving
 set autowrite         " Write old file when switching between files
@@ -203,6 +207,11 @@ augroup END
 " Emails composed in mutt
 augroup muttmail
     autocmd BufRead,BufNewFile        *mutt-* setfiletype mail
+augroup END
+
+augroup javascript_folding
+    au!
+    au FileType javascript setlocal foldmethod=syntax
 augroup END
 
 " Automatically change current directory to that of the file in the buffer
