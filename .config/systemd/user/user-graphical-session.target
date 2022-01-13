@@ -1,0 +1,4 @@
+[Unit]
+Description=User Graphical Session
+Requires=default.target
+After=default.target

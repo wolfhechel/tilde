@@ -24,12 +24,7 @@ export GTK_THEME=Arc-Dark-solid
 # For socket activated rxvt
 export RXVT_SOCKET="$XDG_RUNTIME_DIR/urxvtd-$(uname -n)"
 
-systemctl --user start xss-lock
-systemctl --user start compton
+systemctl --user import-environment
+systemctl --user start user-graphical-session.target
 
-$HOME/.config/statusbar.sh &>/dev/null &
-STATUSBAR_PID=$!
-
-exec dwm &> $HOME/.local/dwm.log
-
-kill -9 $STATUSBAR_PID
+exec dwm &> ${XDG_RUNTIME_DIR}/dwm.log

@@ -1,9 +1,10 @@
-Description=compton
+[Unit]
+Description=statusbar
 PartOf=user-graphical-session.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/compton
+ExecStart=sh %h/.config/statusbar.sh
 
 [Install]
 WantedBy=user-graphical-session.target

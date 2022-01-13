@@ -1,6 +1,6 @@
 [Unit]
 Description=xss-lock
-PartOf=graphical-session.target
+PartOf=user-graphical-session.target
 
 [Service]
 Type=simple
@@ -8,4 +8,4 @@ Environment=XSECURELOCK_DIM_FPS=60
 ExecStart=/usr/bin/xss-lock -n /usr/lib/xsecurelock/dimmer -l -- sh %h/.config/locker.sh
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=user-graphical-session.target
