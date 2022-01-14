@@ -12,16 +12,12 @@ battery_status() {
     AC_online=$(cat ${AC_dir}/online)
 
     if [ "${AC_online}" == "1" ]; then
-        if [ "${level}" == "100" ]; then
-            charging="="
-        else
-            charging="+"
-        fi
+        charging="~"
     else
-        charging="-"
+        charging=""
     fi
 
-    echo "[${charging}] ${level}%"
+    echo "${level}%${charging}"
 }
 
 
@@ -35,6 +31,21 @@ wifi_signal_level() {
     
     cat /proc/net/wireless | awk -F' ' '$1 == "wlp2s0:" { print $4 }' \
         | sed 's/\./dBm/g'
+}
+
+function wifi_signal_strength() {
+    interface=wlp2s0
+    worst_rssi=-85
+    perfect_rssi=-20
+
+    current_rssi=$(cat /proc/net/wireless | grep $interface | tr -s ' ' | tr -d '.' | cut -d' ' -f4)
+
+    nr=$(( $perfect_rssi - $worst_rssi ))
+    dr=$(( $perfect_rssi - $current_rssi ))
+
+    quality=$(( $(( 100 * $nr * $nr - $dr * $(( 15 * $nr + 62 * $dr )) )) / $(( $nr * $nr )) ))
+
+    echo "${quality}%"
 }
 
 nv_temp() {
@@ -118,8 +129,14 @@ function cpufreq() {
     echo $min $mean $max
 }
 
+function freemem() {
+    cat /proc/meminfo | \
+        grep MemFree | tr -s ' ' | cut -d' ' -f2 \
+        | xargs -I {} echo 'scale=1; {}/1024^2' | bc
+}
+
 line() {
-    echo "$(cpufreq) | $(coretemp 1) | $(nv_temp) [$(nv_powermizer)] | $(bt_power) | $(wifi_ssid wlp2s0) ($(wifi_signal_level wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(new_mail) | $(date_)"
+    echo "$(cpufreq) | $(freemem)G | $(coretemp 1) | $(nv_temp) [$(nv_powermizer)] | $(wifi_ssid wlp2s0) ($(wifi_signal_strength wlp2s0)) | $(pamixer --get-volume-human) | $(battery_status BAT0) | $(date_)"
 }
 
 while true; do 
