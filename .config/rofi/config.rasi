@@ -1,5 +1,5 @@
 configuration {
-    modi: "drun,sys:~/.config/rofi/system.sh,rss:~/.config/rofi/rss.sh,notes:~/.config/rofi/notes.sh";
+    modi: "drun,sys:~/.config/rofi/system.sh,notes:~/.config/rofi/notes.sh,docker:~/.config/rofi/docker-compose.sh";
     matching: "fuzzy";
     sort: true;
     sorting-method: "fzf";
@@ -9,6 +9,7 @@ configuration {
     kb-move-char-back: "Left,Alt+h";
     kb-move-char-forward: "Right,Alt+l";
     kb-custom-1: "Alt+Return";
+    kb-custom-2: "Alt+Shift+Return";
     kb-mode-next: "Shift+Right,Control+Tab,Alt+p";
     kb-mode-previous: "Shift+Left,Control+ISO_Left_Tab,Alt+P";
     kb-toggle-case-sensitivity: "grave,dead_grave";
