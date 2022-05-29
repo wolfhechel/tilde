@@ -31,8 +31,10 @@ alternative_order text/plain text/html
 set query_command = 'echo "" && notmuch address from:%s'
 set query_format="%4c %t %-70.70a %-70.70n %?e?(%e)?"
 
+# Macros
 macro index S "<shell-escape>sh ~/.config/mutt/sync-email.sh<enter>" "sync email"
-macro index,pager A "<save-message>+Archive <enter>" "Archive"
+macro index,pager A "<save-message>+Archive<Enter>" "Archive"
+macro index,pager \cb "<pipe-message> urlscan<Enter>" "scan for urls"
 
 set sidebar_visible
 set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
