@@ -1,0 +1,17 @@
+#!/bin/sh
+
+domain=$(echo "$1" | awk -F[:/] '{print $4}')
+
+case "$domain" in
+    www.youtube.com | youtube.com)
+        handler="mpv --profile=720p30fps"
+        ;;
+    
+    *)
+        handler="xdg-open"
+        ;;
+esac
+
+$handler "$1"
+# This would've worked if I could somehow leave the ownership to dwm.
+# coproc ( $handler "$1" 2>&1 1>/dev/null )

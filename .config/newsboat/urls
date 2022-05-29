@@ -1,0 +1,52 @@
+# News
+https://www.svt.se/nyheter/rss.xml "~Sveriges Television" "Nyheter"
+https://www.dn.se/nyheter/m/rss/ "~Dagens Nyheter" "Nyheter"
+https://www.sydsvenskan.se/rss.xml?latest "~Sydsvenskan" "Nyheter"
+https://rss.aftonbladet.se/rss2/small/pages/sections/senastenytt/ "~Aftonbladet" "Nyheter"
+http://expressen.se/rss/nyheter "~Expressen" "Nyheter
+https://www.journalisten.se/nyheter/rss "~Journalisten" "Nyheter"
+https://blankspot.se/feed/ "~Blankspot" "Nyheter"
+https://www.theguardian.com/world/rss "~The Guardian" "Nyheter"
+https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml "~New York Times" "Nyheter"
+
+# Medium
+https://medium.com/feed/towards-data-science "~Towards Data Science" "Medium"
+https://medium.com/feed/@timesopen "~The NYT Open Team" "Medium"
+https://medium.com/feed/@bendobrown "~Benjamin Strick" "Medium"
+
+# Newsletters
+
+https://us10.campaign-archive.com/feed?u=f5c9b898477bcd7a7e64e37d9&id=bf2d183171 "~J++" "Newsletter"
+https://www.getrevue.co/profile/FairWarning?format=rss "~FairWarning" "Newsletters"
+https://www.data-is-plural.com/feed.xml "~data is plural" "Newsletters"
+
+# YouTube
+https://www.youtube.com/feeds/videos.xml?channel_id=UCW2WOgSiMr216a27KWG_aqg "~Bendobrown" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UC2DjFE7Xf11URZqWBigcVOQ "~EEVblog" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCkftXiUHGFBCPsBKd9uGbRA "~European Journalism Centre" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCBG4ZzTTBVg23yVdQhztnfQ "~Jason Vong" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCXuqSBlHAE6Xw-yeJA0Tunw "~Linus Tech Tips" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UChrYe70o7NmDioL02PRVWVg "~MattKC" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCNJe8uQhM2G4jJFRWiM89Wg "~Potato Jet" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCH_2cuWzFMyCPvm75lJJ6wg "~PyCon Sweden" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCCtOSdF1YCUeh_lsbPWIQoQ "~SANS Cyber Defense" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCpXwMqnXfJzazKS5fJ8nrVw "~shiey" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCQD3awTLw9i8Xzh85FKsuJA "~SovietWomble" "YouTube"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCHnyfMqiRRG1u-2MsSQLbXA "~Veritasium" "YouTube"
+
+# Podcasts
+https://feeds.megaphone.fm/ESP6921732651 "~Overheard at National Geographic" "Podcast"
+https://feeds.simplecast.com/Z4wHC1c2 "~Nice White Parents" "Podcast"
+https://www.patreon.com/rss/popularfront?auth=csEGVlJPuxCmNIt2N6MpzbANxiPIv-Qn "~PF BONUS EPISODES" "Podcast"
+https://api.sr.se/api/rss/pod/3795 "~Ekot" "Podcast"
+https://feeds.acast.com/public/shows/daad07ec-a9e6-4921-8af6-0cf9fe8b3fd1 "~Di Morgonkoll" "Podcast"
+https://omny.fm/shows/margins-of-error/playlists/podcast.rss "~Margins of Error" "Podcast"
+https://popularfront.libsyn.com/rss "~Popular Front" "Podcast"
+https://feeds.soundcloud.com/users/soundcloud:users:779989642/sounds.rss "~Data Journalism Conversations" "Podcast"
+https://www.theguardian.com/lifeandstyle/series/weekend/podcast.xml "~Weekend" "Podcast"
+https://www.patreon.com/rss/bellingcat?auth=VL7R_HZO1WmR5FJzp6HkI55PjR2Dodq6 "~Bellingchat" "Podcast"
+https://anchor.fm/s/47aac444/podcast/rss "~The Data Journalism Podcast" "Podcast"
+https://api.sr.se/api/rss/pod/itunes/15382 "~Institutet" "Podcast"
+https://api.sr.se/api/rss/pod/itunes/4021 "~Studio Ett" "Podcast"
+https://api.sr.se/api/rss/pod/itunes/3951 "~Medierna" "Podcast"
+https://feeds.acast.com/public/shows/762d9f12-c5ac-4673-abc3-40de70b4ceab "~Omni Pod" "Podcast"

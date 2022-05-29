@@ -1,0 +1,12 @@
+browser ~/.config/newsboat/open
+
+bind-key j down
+bind-key k up
+bind-key h quit
+bind-key l open
+
+auto-reload yes
+reload-time 30
+reload-threads 20
+
+#keep-articles-days 30
