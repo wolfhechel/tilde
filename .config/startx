@@ -1,5 +1,6 @@
 #!/bin/sh
-# Adopted from sx and udm
+
+cmd="${1}"
 
 cleanup() { 
     if kill -0 "$pid" 2> /dev/null; then
@@ -13,12 +14,6 @@ cleanup() {
     fi
 
     xauth remove :"$tty"
-
-    # There's an issue with vlock blocking the shutdown target.
-    #if ! systemctl is-active shutdown.target; then
-    #    # vlock during shutdown halts the system from shutting down
-    #    vlock
-    #fi
 }
 
 stty=$(stty -g)
@@ -41,7 +36,7 @@ done
 # This is done to indicate that the server is ready to accept connections.
 # Taking advantage of this feature allows launching the client directly from a
 # USR1 signal trap which obviates the need to poll for server readiness.
-trap 'DISPLAY=:$tty exec sh ~/.xinitrc & wait "$!"' USR1
+trap 'DISPLAY=:$tty exec ${cmd} & wait "$!"' USR1
 
 (trap '' USR1 && exec Xorg :"$tty" -keeptty vt"$tty" -noreset -auth "$XAUTHORITY") & pid=$!
 wait "$pid"

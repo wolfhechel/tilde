@@ -1,36 +1,7 @@
 " Disables vi compatibility
 set nocompatible
 
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent execute '!curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-call plug#begin('~/.vim/bundle')
-
-Plug 'morhetz/gruvbox'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'jiangmiao/auto-pairs'
-Plug 'frazrepo/vim-rainbow'
-Plug 'preservim/nerdtree'
-Plug 'tpope/vim-commentary'
-Plug 'ycm-core/YouCompleteMe', { 'do': 'python install.py'}
-Plug 'tpope/vim-surround'
-Plug 'Vimjas/vim-python-pep8-indent'
-Plug 'liuchengxu/vista.vim'
-Plug 'dense-analysis/ale'
-Plug 'jeetsukumaran/vim-pythonsense'
-Plug 'junegunn/fzf.vim'
-Plug 'mattn/emmet-vim'
-Plug 'pangloss/vim-javascript'
-
-call plug#end()
-
 filetype plugin indent on
-
-runtime ftplugin/man.vim
 
 " Enable syntax highlighting, if possible
 if has('syntax') && !exists('g:syntax_on')
@@ -43,42 +14,19 @@ colorscheme gruvbox
 " Dark background, of course
 set background=dark
 
-" Airline options
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme = 'gruvbox'
-
-" Enable rainbow globally
-let g:rainbow_active = 1
-
-" Disable ALE completion
-let g:ale_completion_enabled = 0
-
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_auto_trigger = 1
-
-" Avoid having autopairs ruin my letters
-let g:AutoPairsShortcutFastWrap = "<C-f>"
 " Buffer options
 set hidden            " Switch between buffers without saving
 set autowrite         " Write old file when switching between files
 set nobackup          " Don't keep backup files
 set noswapfile        " And no swap files either!
-set switchbuf=useopen " Show already opened files in quickfix window instead
-                      " of ropening them
 set encoding=utf-8    " Use UTF-8 encoding
 set lazyredraw        " Don't update the display while executing macros
-set history=1000      " Remember more commands and search history
-set undolevels=1000   " Deeper undo list
 set noautochdir       " Don't change working dir, use autocmd for that
-set splitbelow        " Split windows bellow
 
 if v:version >= 730
     set undofile                " Keep a persistent backup file
     set undodir=~/.vim/.undo,~/tmp,/tmp
 endif
-
-" Ignored file globs when expanding wildcards
-set wildignore=.git,*.swp,*.bak,*.pyc,*.class,*.o,,
 
 " Search options
 set incsearch  " Show search matches as we're typing
@@ -101,45 +49,36 @@ set wrap                " Wrap text
 set formatoptions=qrnlj " Options for text-wrapping/-formatting (:help fo-tables)
 
 " Folding options
+set foldenable
 set foldmethod=indent
 set foldlevel=99
 
 " Interface options
 set number        " Line numbering
-set laststatus=2  " Always show the status line
-set noshowmode    " We got vim-airline for this now
 set scrolloff=2   " Keep 2 lines margin top and bottom when scrolling
 set mousehide     " Hide mouse when typing  
-set mouse=a       " Enable using mouse if terminal supports it
+set mouse=a
 set title         " Change the terminal's title
 set noerrorbells  " Don't beep on error 
 set list          " Show unprintable characters
-set listchars=tab:»»,eol:¶,trail:·,nbsp:% " Sets up some less obtrusive symbols
+set listchars=tab:»»,trail:·,nbsp:% " Sets up some less obtrusive symbols
 set clipboard=unnamedplus " Yank to CLIPBOARD
 
 " Editing options
 set showmatch                  " Highlights matching paranthesis
 set backspace=indent,eol,start " Allow backspacing over linestops in insert mode
-set pastetoggle=<F4>           " Toggle paste with F4
 set nomodeline                 " Disables modelines for security
 set cursorline                 " Highlights current line
-set foldenable                 " Enable folding
 set wildmenu                   " Enable commandline completion
 set wildmode=full
+set wildignore=.git,*.swp,*.bak,*.py[co],*.class,*.o
 
 " Keymappings
 let mapleader="ä"
 nmap ö :
 
-nmap <Leader>a :NERDTreeToggle<CR>
-nmap <Leader>s :Vista<CR>
-nmap <leader>g :YcmCompleter GoToDefinition<CR>
-
 " Space clears search highlights
 nnoremap <silent> <Space> :nohlsearch<CR>
-
-" Ctrl+Space folds code
-nnoremap <silent> <space> za
 
 " Switch between buffers
 nnoremap <C-j> :bprev<CR>
@@ -217,9 +156,6 @@ augroup END
 " Automatically change current directory to that of the file in the buffer
 au BufEnter * silent! lcd %:p:h  
 
-" Use YAML syntax for salt state files
-au BufRead,BufNewFile *.sls set ft=yaml ts=4 sts=4 sw=4
-
 " Groovy syntax for gradle files
 au BufRead,BufNewFile *.gradle setf groovy
 
@@ -228,8 +164,6 @@ au FileType make setlocal noexpandtab
 
 " Autosave files on leaving buffer, leaving insert mode or lost focus
 au BufLeave,FocusLost,InsertLeave * silent! wall
-
-au FileType python nnoremap <buffer> <C-r> :! python %<CR>
 
 if has('gui')
     " Set a decent font
@@ -242,25 +176,22 @@ if has('gui')
     au GUIEnter * set visualbell t_vb= 
 endif
 
-function RefactorName()
-    call inputsave()
-    let new_name = input('refactor: ')
-    call inputrestore()
+set tags=tags;/
 
-    execute ":YcmCompleter RefactorRename " . new_name .""
-endfunction
+fun! UpdateTags()
+    let s:tag_files = tagfiles()
 
-nnoremap <Leader>r :call RefactorName()<CR>
+    if len(s:tag_files) > 0
+        let s:f = expand("%:p")
+        let s:response = system("ctags " . g:ft_ctags_flags . " -a -f " . s:tag_files[0] . " " . s:f)
+    endif
+endfun
 
-py3 << EOF
-import os
-import vim
+augroup python_spec
+    au!
+    au FileType python set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+    au FileType python let python_highlight_all = 1
+    au FileType python let g:ft_ctags_flags = "--fields=+l --languages=python --python-kinds=-iv --extras=+f"
+    autocmd BufWritePost *.py call UpdateTags()
+augroup END
 
-virtual_env = os.environ.get('VIRTUAL_ENV', None)
-
-if virtual_env:
-    interpreter = os.path.join(virtual_env, 'bin', 'python')
-
-    vim.command('let g:ycm_python_binary_path = "%s"' % interpreter)
-
-EOF

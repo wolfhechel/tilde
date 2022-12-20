@@ -1,0 +1,229 @@
+# Default modifier key
+set $mod Mod1
+
+# Navigational keys vim-style
+set $left h
+set $down j
+set $up k
+set $right l
+
+# Default terminal
+set $term alacritty
+
+# lock command
+set $lock loginctl lock-session
+
+set $internal_display eDP-1
+set $external_display DP-1
+
+# Setup wallpaper
+output * bg ~/.config/sway/background.png fill
+
+# Set default resolution on our outputs
+output $internal_display res 1920x1080
+output $external_display res 1920x1080@143.997Hz
+
+# Clamshell mode
+bindswitch --locked lid:on output $internal_display disable
+bindswitch --locked lid:off output $internal_display enable
+
+# Run a daemon in the background that listens for lock signal from systemd
+# this is triggered by running loginctl lock-session
+exec python ~/.config/sway/lock-session-handler.py \
+    "swaylock -e -f -c 000000 && loginctl unlock-session"
+
+# Run wayland overlay bar in the background as a daemon
+# Lets us pipe output to $wobsock
+set $wobsock $XDG_RUNTIME_DIR/wob.sock
+exec rm -f $wobsock && mkfifo $wobsock && tail -f $wobsock | wob
+
+### dunst notification daemon
+exec dunst
+
+### Start idle daemon 
+
+set $timeout_lock_bat 300
+set $timeout_dpms_bat 600
+set $timeout_lock_ac  1800
+set $timeout_dpms_ac 3600
+
+set $ac /sys/class/power_supply/AC/online
+exec swayidle -w \
+         timeout $timeout_lock_bat 'grep 0 $ac && $lock' \
+         timeout $timeout_dpms_bat 'grep 0 $ac && swaymsg "output * dpms off"' \
+         resume 'swaymsg "output * dpms on"' \
+         timeout $timeout_lock_ac 'grep 1 $ac && $lock' \
+         timeout $timeout_dpms_ac 'grep 1 $ac && swaymsg "output * dpms off"' \
+         resume 'swaymsg "output * dpms on"' \
+         after-resume 'swaymsg "output * dpms on" && swaymsg "output $internal_display enable"' \
+         before-sleep '$lock'
+
+# Avoid idling when applications are fullscreen
+for_window [app_id="^.*"] inhibit_idle fullscreen
+
+# When running alacritty with "launcher class" make sure it's modal
+for_window [app_id="^launcher$"] floating enable, border none, opacity 0.9
+
+# Configure inputs
+
+input "type:touchpad" {
+    dwt enabled
+    tap enabled
+}
+
+input "type:keyboard" {
+    xkb_layout se
+    xkb_options caps:ctrl_modifier
+}
+
+### Key bindings
+
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
+
+# Launcher
+set $drun_cache "~/.cache/desktop.entries.cache"
+
+bindsym $mod+p exec $term --class launcher -e zsh -c \
+    "sh ~/.config/sway/launcher | xargs -0 swaymsg exec &>/dev/null"
+
+# Start a terminal
+bindsym $mod+Return exec $term
+
+# Kill focused window
+bindsym $mod+Shift+q kill
+
+# Move your focus around
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+
+# Move the focused window with the same, but add Shift
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+
+# Switch to workspace
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+0 workspace number 10
+
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+
+# You can "split" the current object of your focus with
+# $mod+b or $mod+v, for horizontal and vertical splits
+# respectively.
+bindsym $mod+b splith
+bindsym $mod+v splitv
+
+# Switch the current container between different layout styles
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Make the current focus fullscreen
+bindsym $mod+f fullscreen
+
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
+
+# Swap focus between the tiling area and the floating area
+bindsym $mod+space focus mode_toggle
+
+# Move focus to the parent container
+bindsym $mod+a focus parent
+
+# Move the currently focused window to Sway's "scratchpad", 
+# which is a bag of holding for windows.
+# You can send windows there and get them back later.
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+minus scratchpad show
+
+# Mode for resizing containers
+mode "resize" {
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Return to default mode
+    bindsym q mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+# Power management mode
+set $pwr_mode "(p)poweroff (r)eboot (s)uspend log(o)ut (l)ock re(c)onfig (e)xit"
+
+mode $pwr_mode {
+  bindsym {
+    p       exec systemctl poweroff
+    r       exec systemctl reboot
+    s       exec systemctl suspend ; mode "default"
+    o       exec loginctl terminate-session $XDG_SESSION_ID
+    l       exec $lock ; mode "default"
+    c       reload
+    e       mode "default"
+    q       mode "default"
+    Escape  mode "default"
+  }
+}
+
+bindsym $mod+Shift+p mode $pwr_mode
+
+# Audio control keys
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioRaiseVolume exec pamixer -ui 2 && pamixer --get-volume > $wobsock
+bindsym XF86AudioLowerVolume exec pamixer -ud 2 && pamixer --get-volume > $wobsock
+bindsym XF86AudioMute exec pamixer --toggle-mute \
+        && ( [ "$(pamixer --get-mute)" = "true" ] && echo 0 > $wobsock ) \
+        || pamixer --get-volume > $wobsock
+
+# Brightness control keys
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%- \
+        | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $wobsock
+bindsym XF86MonBrightnessUp exec brightnessctl set +5% \
+        | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $wobsock
+
+# Configure swaybar
+bar {
+    position top
+
+    status_command while sh $HOME/.config/sway/statusbar; do sleep 1; done
+
+    colors {
+        statusline #ffffff
+        background #323232
+        inactive_workspace #32323200 #32323200 #5c5c5c
+    }
+}
+
+include /etc/sway/config.d/*
