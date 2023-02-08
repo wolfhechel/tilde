@@ -1,3 +1,10 @@
+# XDG Default Paths
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
+export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
+export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/$UID}
+
 # Set user paths
 _paths_to_try=(
     "${HOME}/.bin"
@@ -22,7 +29,7 @@ if [ -d $HOME/.gem ]; then
 fi
 
 # Perl environment configuration
-PERL_LOCAL_LIB_ROOT="${HOME}/.perl5";
+PERL_LOCAL_LIB_ROOT="${XDG_STATE_HOME}/perl5";
 PERL_MB_OPT="--install_base ${PERL_LOCAL_LIB_ROOT}";
 PERL_MM_OPT="INSTALL_BASE=${PERL_LOCAL_LIB_ROOT}";
 PERL5LIB="${PERL_LOCAL_LIB_ROOT}/lib/perl5/x86_64-linux-thread-multi:${PERL_LOCAL_LIB_ROOT}/lib/perl5";
@@ -34,13 +41,10 @@ export PERL_LOCAL_LIB_ROOT \
        PERL5LIB \
        PATH
 
-# Go environment configuration
-export GOPATH=~/Code/Go
-
 # History configuration
 export HISTIGNORE="&:ls:[bf]g:exit:reset:clear:cd:cd ..:cd.."
 export HISTSIZE=25000
-export HISTFILE=~/.zsh_history
+export HISTFILE=${XDG_STATE_HOME}/zsh/history
 export SAVEHIST=10000
 
 # Set a more restrictive umask

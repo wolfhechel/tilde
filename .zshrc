@@ -1,7 +1,7 @@
 fpath=($HOME/.zsh/comp $fpath)
 
 autoload -Uz vcs_info
-autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit -d ${XDG_CACHE_HOME}/zsh/zcompdump-$ZSH_VERSION
 autoload bashcompinit && bashcompinit
 
 setopt rm_star_wait # Prompts for confirmation after commands like rm *
@@ -144,6 +144,7 @@ zstyle ':completion:*' list-colors "=(#b) #([0-9]#)*=36=31"
 zstyle ':completion:*' ignore-parents parent pwd
 zstyle ':completion:*' list-separator '--'
 zstyle ':completion::complete:*' use-cache 1
+zstyle ':completion:*' cache-path ${XDG_CACHE_HOME}/zsh/zcompdump
 zstyle ':completion:*:descriptions' format '%B%d%b'
 zstyle ':completion:*:messages' format '%d'
 zstyle ':completion:*:warnings' format 'No matches for: %d'

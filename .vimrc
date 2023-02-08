@@ -1,3 +1,14 @@
+set backupdir=$XDG_STATE_HOME/vim/backup | call mkdir(&backupdir, 'p')
+set directory=$XDG_STATE_HOME/vim/swap   | call mkdir(&directory, 'p')
+set undodir=$XDG_STATE_HOME/vim/undo     | call mkdir(&undodir,   'p')
+set viewdir=$XDG_STATE_HOME/vim/view     | call mkdir(&viewdir,   'p')
+set viminfofile=$XDG_STATE_HOME/vim/viminfo
+
+if v:version >= 730
+    set undofile                " Keep a persistent backup file
+    set undodir=$XDG_STATE_HOME/vim/undo,~/tmp,/tmp
+endif
+
 " Disables vi compatibility
 set nocompatible
 
@@ -22,11 +33,6 @@ set noswapfile        " And no swap files either!
 set encoding=utf-8    " Use UTF-8 encoding
 set lazyredraw        " Don't update the display while executing macros
 set noautochdir       " Don't change working dir, use autocmd for that
-
-if v:version >= 730
-    set undofile                " Keep a persistent backup file
-    set undodir=~/.vim/.undo,~/tmp,/tmp
-endif
 
 " Search options
 set incsearch  " Show search matches as we're typing
