@@ -9,6 +9,22 @@ search_dirs = [
     '/usr/share/applications'
 ]
 
+def get_term(pid, halt=False):
+    with open('/proc/%s/stat' % pid, 'r') as stat:
+        info = stat.read().split(' ')
+
+    exe = info[1].strip('()')
+    ppid = info[3]
+
+    if halt:
+        return os.readlink('/proc/%s/exe' % pid)
+    else:
+        return get_term(ppid, exe == current_shell)
+
+current_shell = os.path.basename(os.getenv('SHELL', ''))
+term = get_term(os.getpid())
+
+
 FMT_RE = re.compile(r'\s?%.')
 
 def read_desktop_entry(fh):
@@ -37,7 +53,7 @@ def read_desktop_entry(fh):
         execute = FMT_RE.sub('', values.get('Exec', ''))
 
         if values.get('Terminal', '') == 'true':
-            execute = '%s -e %s' % (os.environ.get('TERM'), execute)
+            execute = '%s -e %s' % (term, execute)
 
         return '%s;%s' % (execute, name)
     else:

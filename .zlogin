@@ -5,7 +5,7 @@ case "${XDG_VTNR}" in
             exec dbus-run-session sway --unsupported-gpu
         fi
         ;;
-    2)  if [ -z "${DISPLAY}" ] && which Xorg &> /dev/null; then
+    2)  if [ -z "${DISPLAY}" ] && which dwm &> /dev/null; then
             exec ~/.config/startx "sh $HOME/.xinitrc"
         fi
         ;;

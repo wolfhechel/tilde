@@ -1,3 +1,4 @@
+xwayland disable
 # Default modifier key
 set $mod Mod1
 
@@ -8,7 +9,7 @@ set $up k
 set $right l
 
 # Default terminal
-set $term alacritty
+set $term foot
 
 # lock command
 set $lock loginctl lock-session
@@ -88,7 +89,7 @@ floating_modifier $mod normal
 # Launcher
 set $drun_cache "~/.cache/desktop.entries.cache"
 
-bindsym $mod+p exec $term --class launcher -e zsh -c \
+bindsym $mod+p exec $term -a launcher -- zsh -c \
     "sh ~/.config/sway/launcher | xargs -0 swaymsg exec &>/dev/null"
 
 # Start a terminal
