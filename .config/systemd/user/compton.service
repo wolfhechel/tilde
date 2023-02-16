@@ -1,9 +1,0 @@
-Description=compton
-PartOf=user-graphical-session.target
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/compton
-
-[Install]
-WantedBy=user-graphical-session.target

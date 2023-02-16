@@ -9,6 +9,8 @@ case "${XDG_VTNR}" in
             exec ~/.config/startx "sh $HOME/.xinitrc"
         fi
         ;;
+    3)  systemctl --wait --user start sway.service
+        ;;
     *)
         ;;
 esac

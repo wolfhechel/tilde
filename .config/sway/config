@@ -1,4 +1,4 @@
-xwayland disable
+# xwayland disable
 # Default modifier key
 set $mod Mod1
 
@@ -228,3 +228,4 @@ bar {
 }
 
 include /etc/sway/config.d/*
+exec systemd-notify --ready
