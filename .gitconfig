@@ -66,3 +66,5 @@
     insteadOf = "gist:"
 [pull]
 	rebase = false
+[init]
+	defaultBranch = main
