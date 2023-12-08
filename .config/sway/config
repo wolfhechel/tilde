@@ -216,6 +216,21 @@ bindsym XF86MonBrightnessDown exec brightnessctl set 5%- \
 bindsym XF86MonBrightnessUp exec brightnessctl set +5% \
         | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $wobsock
 
+set $grim_area_display -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
+set $grim_area_window -g "$(swaymsg -t get_tree | jq -j '.. | select(.type?) | select(.focused).rect | "\(.x),\(.y) \(.width)x\(.height)"')"
+set $grim_area_selection -g "$(slurp)"
+
+set $grim_save_file $(xdg-user-dir PICTURES)/$(date +'%s_grim.png') && notify-send "Saved screenshot to file"
+set $grim_save_clip - | wl-copy -p && notify-send "Saved screenshot to clipboard"
+
+bindsym Print exec grim $grim_area_display $grim_save_file
+bindsym Shift+Print exec grim $grim_area_window $grim_save_file
+bindsym Ctrl+Print exec grim $grim_area_selection $grim_save_file
+
+bindsym $mod+Print exec grim $grim_area_display $grim_save_clip
+bindsym $mod+Shift+Print exec grim $grim_area_window $grim_save_clip
+bindsym $mod+Ctrl+Print exec grim $grim_area_selection $grim_save_clip
+
 # Configure swaybar
 bar {
     position top
@@ -231,5 +246,3 @@ bar {
 
 include /etc/sway/config.d/*
 exec systemd-notify --ready
-
-

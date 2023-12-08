@@ -131,7 +131,7 @@ function cpufreq() {
 
 function freemem() {
     cat /proc/meminfo | \
-        grep MemFree | tr -s ' ' | cut -d' ' -f2 \
+        grep MemAvailable | tr -s ' ' | cut -d' ' -f2 \
         | xargs -I {} echo 'scale=1; {}/1024^2' | bc
 }
 
