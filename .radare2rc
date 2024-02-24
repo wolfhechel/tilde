@@ -1,0 +1,6 @@
+e asm.cmt.right = true
+e asm.pseudo = true
+
+eco solarized
+
+e scr.utf8 = true

@@ -15,6 +15,7 @@ output * bg ~/.config/sway/background.png fill
 # Set default resolution on our outputs
 output $internal_display res 1920x1080
 output $external_display res 1920x1080@143.997Hz
+output "BNQ BenQ PD3200U DAJ01738019" res 2560x1440@59.951Hz
 
 # Clamshell mode
 bindswitch --locked lid:on output $internal_display disable
