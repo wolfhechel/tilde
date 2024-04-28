@@ -1,62 +1,32 @@
-# xwayland disable
+xwayland disable
 
 # Default terminal
 set $term foot
 
-# lock command
-set $lock loginctl lock-session
-
 set $internal_display eDP-1
-set $external_display DP-1
 
 # Setup wallpaper
 output * bg ~/.config/sway/background.png fill
 
 # Set default resolution on our outputs
 output $internal_display res 1920x1080
-output $external_display res 1920x1080@143.997Hz
+# output DP-1 res 1920x1080@143.997Hz
 output "BNQ BenQ PD3200U DAJ01738019" res 2560x1440@59.951Hz
 
 # Clamshell mode
 bindswitch --locked lid:on output $internal_display disable
 bindswitch --locked lid:off output $internal_display enable
 
-exec_always cat /proc/acpi/button/lid/LID0/state | awk '{print $2}' \
+exec_always cat /proc/acpi/button/lid/LID/state | awk '{print $2}' \
         | grep -q 'closed' && swaymsg output $internal_display disable
 
-exec_always cat /proc/acpi/button/lid/LID0/state | awk '{print $2}' \
+exec_always cat /proc/acpi/button/lid/LID/state | awk '{print $2}' \
         | grep -q 'open' && swaymsg output $internal_display enable
 
-# Run a daemon in the background that listens for lock signal from systemd
-# this is triggered by running loginctl lock-session
-exec python ~/.config/sway/lock-session-handler.py \
-    "swaylock -e -f -c 000000 && loginctl unlock-session"
-
-# Run wayland overlay bar in the background as a daemon
-# Lets us pipe output to $wobsock
 set $wobsock $XDG_RUNTIME_DIR/wob.sock
-exec rm -f $wobsock && mkfifo $wobsock && tail -f $wobsock | wob
 
-### dunst notification daemon
-exec dunst
-
-### Start idle daemon 
-
-set $timeout_lock_bat 300
-set $timeout_dpms_bat 600
-set $timeout_lock_ac  1800
-set $timeout_dpms_ac 3600
-
-set $ac /sys/class/power_supply/AC/online
-exec swayidle -w \
-         timeout $timeout_lock_bat 'grep 0 $ac && $lock' \
-         timeout $timeout_dpms_bat 'grep 0 $ac && swaymsg "output * dpms off"' \
-         resume 'swaymsg "output * dpms on"' \
-         timeout $timeout_lock_ac 'grep 1 $ac && $lock' \
-         timeout $timeout_dpms_ac 'grep 1 $ac && swaymsg "output * dpms off"' \
-         resume 'swaymsg "output * dpms on"' \
-         after-resume 'swaymsg "output * dpms on" && swaymsg "output $internal_display enable"' \
-         before-sleep '$lock'
+default_border pixel
+smart_borders on
 
 # Avoid idling when applications are fullscreen
 for_window [app_id="^.*"] inhibit_idle fullscreen
@@ -140,8 +110,8 @@ bindsym $mod+Shift+0 move container to workspace number 10
 # You can "split" the current object of your focus with
 # $mod+b or $mod+v, for horizontal and vertical splits
 # respectively.
-bindsym $mod+b splith
-bindsym $mod+v splitv
+# bindsym $mod+b splith
+# bindsym $mod+v splitv
 
 # Switch the current container between different layout styles
 bindsym $mod+s layout stacking
@@ -191,7 +161,7 @@ mode $pwr_mode {
     r       exec systemctl reboot
     s       exec systemctl suspend ; mode "default"
     o       exec loginctl terminate-session $XDG_SESSION_ID
-    l       exec $lock ; mode "default"
+    l       exec loginctl lock-session; mode "default"
     c       reload
     e       mode "default"
     q       mode "default"
@@ -207,9 +177,9 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioRaiseVolume exec pamixer -ui 2 && pamixer --get-volume > $wobsock
 bindsym XF86AudioLowerVolume exec pamixer -ud 2 && pamixer --get-volume > $wobsock
-bindsym XF86AudioMute exec pamixer --toggle-mute \
-        && ( [ "$(pamixer --get-mute)" = "true" ] && echo 0 > $wobsock ) \
+bindsym XF86AudioMute exec ([ "$(pamixer -t --get-mute)" = "true" ] && echo 0 > $wobsock) \
         || pamixer --get-volume > $wobsock
+bindsym XF86AudioMicMute exec pamixer --default-source -t
 
 # Brightness control keys
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%- \
@@ -232,18 +202,78 @@ bindsym $mod+Print exec grim $grim_area_display $grim_save_clip
 bindsym $mod+Shift+Print exec grim $grim_area_window $grim_save_clip
 bindsym $mod+Ctrl+Print exec grim $grim_area_selection $grim_save_clip
 
+# Polar Night
+set $nord0  #2e3440
+set $nord1  #3b4252
+set $nord2  #434c5e
+set $nord3  #4c566a
+
+# Snow Storm
+set $nord4  #d8dee9
+set $nord5  #e5e9f0
+set $nord6  #eceff4
+
+# Frost
+set $nord7  #8fbcbb
+set $nord8  #88c0d0
+set $nord9  #81a1c1
+set $nord10 #5e81ac
+
+# Aurora
+set $nord11 #bf616a
+set $nord12 #d08770
+set $nord13 #ebcb8b
+set $nord14 #a3be8c
+set $nord15 #b48ead
+
+set $normal_bg $nord1
+set $normal_fg $nord6
+set $focus_bg  $nord9
+set $focus_fg  $nord1
+set $urgent_bg $nord11
+set $urgent_fg $nord6
+set $second_bg $nord3
+set $second_fg $nord6
+
+set $font SourceCodePro Regular 12
+
+client.focused           $focus_bg  $focus_bg  $focus_fg
+client.focused_inactive  $second_bg $second_bg $second_fg
+client.unfocused         $normal_bg $normal_bg $normal_fg
+client.urgent            $urgent_bg $urgent_bg $urgent_fg
+
+font pango:$font
+
 # Configure swaybar
 bar {
     position top
+    font pango:$font
 
     status_command while sh $HOME/.config/sway/statusbar; do sleep 1; done
+    status_edge_padding 10
+    status_padding 0
 
     colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
+        background $normal_bg
+        statusline $normal_fg
+        separator $normal_fg
+        focused_workspace $focus_bg $focus_bg $focus_fg
+        active_workspace $second_bg $second_bg $second_fg
+        inactive_workspace $normal_bg $normal_bg $normal_fg
+        urgent_workspace $urgent_bg $urgent_bg $urgent_fg
     }
 }
 
 include /etc/sway/config.d/*
-exec systemd-notify --ready
+
+exec systemctl --user reset-failed
+
+exec systemctl --user set-environment \
+    WAYLAND_DISPLAY \
+    SWAYSOCK \
+    I3SOCK \
+    XDG_RUNTIME_DIR \
+    XDG_SESSION_TYPE \
+    XDG_SESSION_DESKTOP
+
+exec systemctl start --user sway-session.target

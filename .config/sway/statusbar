@@ -1,40 +1,45 @@
 #!/bin/sh
 
-battery_status() {
+battery_level_fn() {
     BAT_dir=/sys/class/power_supply/$1
+
+    charge_now=$(cat ${BAT_dir}/energy_now)
+    charge_full=$(cat ${BAT_dir}/energy_full)
+
+    echo "scale=2;(${charge_now}/${charge_full})*100" | bc | cut -d. -f1
+}
+
+charging_fn() {
     AC_dir=/sys/class/power_supply/AC
-
-    charge_now=$(cat ${BAT_dir}/charge_now)
-    charge_full=$(cat ${BAT_dir}/charge_full)
-
-    level=`echo "scale=2;(${charge_now}/${charge_full})*100" | bc | cut -d'.' -f1`
+    indicator=$1
 
     AC_online=$(cat ${AC_dir}/online)
 
     if [ "${AC_online}" == "1" ]; then
-        charging="~"
+        echo $indicator
     else
-        charging=""
+        echo " "
     fi
-
-    echo "${level}%${charging}"
 }
 
+battery_level_critical_fn() {
+    level=`battery_level_fn $1`
+    threshold=$2
 
-wifi_ssid() {
-    nmcli -t -f GENERAL.CONNECTION device show $1 \
-        | cut -d':' -f2
+    if [ $level -le $threshold ]; then
+        echo true
+    else
+        echo false
+    fi
 }
 
-wifi_signal_level() {
+wifi_wpa_cli_ssid_fn() {
     interface=$1
-    
-    cat /proc/net/wireless | awk -F' ' '$1 == "wlp2s0:" { print $4 }' \
-        | sed 's/\./dBm/g'
+    wpa_cli -p "${interface}" status | grep ^ssid= | cut -d= -f2
 }
 
-function wifi_signal_strength() {
-    interface=wlp2s0
+wifi_signal_strength_fn() {
+    interface=$1
     worst_rssi=-85
     perfect_rssi=-20
 
@@ -48,95 +53,45 @@ function wifi_signal_strength() {
     echo "${quality}%"
 }
 
-nv_temp() {
-    nvidia-smi -q -d TEMPERATURE | grep "GPU Current Temp" | cut -d':' -f2 | tr -d ' C'
-}
-
-nv_powermizer() {
-    case $(nvidia-settings -t -q \[gpu:0\]/GpuPowerMizerMode) in
-        0)  # Adaptive
-            echo "~"
-            ;;
-        1)  # Maximum
-            echo !
-            ;;
-        2)  # Auto
-            echo A
-            ;;
-        *)  # Unknown
-            echo ?
-            ;;
-    esac
-}
-
-coretemp_hwmon=
-
-for file in /sys/class/hwmon/hwmon*/name; do
-    name=$(cat $file)
-
-    if [ "${name}" == "coretemp" ]; then
-        coretemp_hwmon=${file%/*}
-    fi
-done
-
-coretemp() {
-    echo $(cat ${coretemp_hwmon}/temp${1}_input) / 1000 | bc
-}
-
-bt_power() {
-    if bluetoothctl show | grep "Powered: yes" &>/dev/null; then
-        echo "1"
-    else
-        echo "0"
-    fi
-}
-
-new_mail() {
-    notmuch count folder:INBOX AND tag:unread
-}
-
-date_() {
+date_fn() {
     date "+%m/%d %H:%M"
 }
 
-function cpufreq() {
-    count=0
-    total=0
-
-    values="$(cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq)"
-
-    min=$(echo $values | cut -d' ' -f1)
-    max=0
-
-    for hz in $values; do
-        if [ "$hz" -lt "$min" ]; then
-            min="$hz"
-        fi
-
-        if [ "$hz" -gt "$max" ]; then
-            max="$hz"
-        fi
-
-        total=$(echo $total+$hz/10^6| bc)
-        ((count++))
-    done
-
-    min=$(echo "scale=1; $min/10^6" | bc | xargs printf '%.1f')
-    max=$(echo "scale=1; $max/10^6" | bc | xargs printf '%.1f')
-
-    mean=$(echo "scale=1; $total/$count" | bc | xargs printf '%.1f')
-
-    echo $min $mean $max
-}
-
-function freemem() {
+freemem_fn() {
     cat /proc/meminfo | \
         grep MemAvailable | tr -s ' ' | cut -d' ' -f2 \
         | xargs -I {} echo 'scale=1; {}/1024^2' | bc
 }
 
-line() {
-    echo "$(cpufreq) | $(freemem)G | $(coretemp 1) | $(nv_temp) | $(wifi_ssid wlp2s0) ($(wifi_signal_strength wlp2s0)) | $(battery_status BAT0) | $(date_)"
+window_fn() {
+    # Blocking, do not use
+    swaymsg -t subscribe -m '["window"]' | jq -r '.container.name'
 }
 
-line
+function format() {
+    echo -n "{\"full_text\":\"${1}\"},"
+}
+
+echo '{ "version": 1 }'
+echo '['
+
+while :; do
+cat << JSON
+[
+    {
+        "full_text": "$(freemem_fn)G"
+    },
+    {
+        "full_text": "$(wifi_wpa_cli_ssid_fn /run/wpa_supplicant) ($(wifi_signal_strength_fn wlp3s0))"
+    },
+    {
+        "full_text": "$(battery_level_fn BAT0)%$(charging_fn "~")",
+        "urgent": $(battery_level_critical_fn BAT0 10)
+    },
+    {
+        "full_text": "$(date_fn)"
+    }
+],
+JSON
+    sleep 1
+done

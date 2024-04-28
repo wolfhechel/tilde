@@ -12,14 +12,26 @@ icon_path = .config/dunst/icons/status/:.config/dunst/icons/devices/
 separator_height = 5
 separator_color = "#00000000"
 
+[shortcuts]
+close = ctrl+shift+space
+close_all = ctrl+shift+space
+history = ctrl+grave
+context = ctrl+shift+period
+
 [urgency_low]
-background="#47484a"
-foreground="#9bebc3"
+timeout = 2
+background = "#212B30"
+foreground = "#C4C7C5"
+frame_color = "#4DD0E1"
 
 [urgency_normal]
-background="#47484a"
-foreground="#9bebc3"
+timeout = 5
+background = "#212B30"
+foreground = "#C4C7C5"
+frame_color = "#4DD0E1"
 
 [urgency_critical]
-background="#47484a"
-foreground="#f15d5d"
+timeout = 0
+background = "#212B30"
+foreground = "#EC407A"
+frame_color = "#EC407A"

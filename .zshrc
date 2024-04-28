@@ -55,19 +55,20 @@ alias mv='mv -i'
 alias cp='cp -i'
 
 # Colorize commands
-if [ "$(uname)" != "Darwin" ]; then
-    alias ls='ls --color'
-else
-    # Which is a bit different on a Mac
-    export CLICOLOR=1
-    export LSCOLORS=GxFxCxDxBxegedabagaced
-fi
+alias ls='ls --color'
+test -r ~/.config/dir_colors && eval $(dircolors ~/.config/dir_colors)
+
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+    --color=fg:#e5e9f0,bg:#3b4252,hl:#81a1c1
+    --color=fg+:#e5e9f0,bg+:#3b4252,hl+:#81a1c1
+    --color=info:#eacb8a,prompt:#bf6069,pointer:#b48dac
+    --color=marker:#a3be8b,spinner:#b48dac,header:#a3be8b'
 
 alias grep='grep --color'
 alias less='less -R'
 
-if [ -d $HOME/.tilde.git ]; then
-    alias tilde='git --git-dir=$HOME/.tilde.git --work-tree=$HOME'
+if [ -d $HOME/.tilde ]; then
+    alias tilde='git --git-dir=$HOME/.tilde --work-tree=$HOME'
     compdef _git tilde
 fi
 

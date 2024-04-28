@@ -31,6 +31,7 @@ path=/home/jonet/.local/mail
 [user]
 name=Pontus Jensen Karlsson
 primary_email=pontus@jensenkarlsson.se
+other_email=pontusjoncarlsson@gmail.com;pontuscarlsson@live.se
 
 # Configuration for "notmuch new"
 #

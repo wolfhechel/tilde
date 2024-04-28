@@ -1,0 +1,6 @@
+.First <- function() {
+    message("Current working directory is ", getcwd())
+}
+
+options(browser = 'firefox')
+options(

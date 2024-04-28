@@ -53,7 +53,7 @@ def read_desktop_entry(fh):
         execute = FMT_RE.sub('', values.get('Exec', ''))
 
         if values.get('Terminal', '') == 'true':
-            execute = '%s -e %s' % (term, execute)
+            execute = '%s -e %s -c %s' % (term, current_shell, execute)
 
         return '%s;%s' % (execute, name)
     else:

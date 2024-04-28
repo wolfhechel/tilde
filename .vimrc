@@ -20,7 +20,7 @@ if has('syntax') && !exists('g:syntax_on')
 endif
 
 " Everybody needs a neat colorscheme
-colorscheme gruvbox
+colorscheme nord
 
 " Dark background, of course
 set background=dark

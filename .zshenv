@@ -62,3 +62,17 @@ if which less &> /dev/null; then
     export PAGER="less"
     export LESS="--ignore-case --LONG-PROMPT --QUIET --chop-long-lines -Sm --RAW-CONTROL-CHARS --quit-if-one-screen --no-init"
 fi
+
+[ "${TTY}" != "/dev/tty" ] && export GPG_TTY="${TTY}"
+
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
+
+
+# Move R configurations
+R_HOME_USER="${XDG_CONFIG_HOME}/R"
+R_PROFILE_USER="${R_HOME_USER}/profile"
+R_ENVIRON_USER="${R_HOME_USER}/environ"
+R_HISTFILE="${XDG_STATE_HOME}/Rhistory"

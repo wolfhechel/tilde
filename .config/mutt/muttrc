@@ -4,14 +4,26 @@ set from = "pontus@jensenkarlsson.se"
 set mbox_type = Maildir
 set folder = ~/.local/mail
 
+mailboxes `~/.config/mutt/scripts/mailboxes ~/.local/mail`
+
 set spoolfile = +INBOX
 set postponed = +Drafts
 set record = +Sent
 set trash = +Trash
 
-mailboxes =INBOX =Junk =Drafts =Sent =Trash =Archive
+subscribe nicar-l@po.missouri.edu
+
+# Hooks
+startup-hook `~/.config/mutt/scripts/sync`
 
 set sendmail = "msmtp -a mailbox"
+
+# Ignore all headers, whitelist certain ones
+ignore *
+unignore From \
+         To \
+         Subject \
+         Date
 
 set edit_headers = no
 set header_cache = ~/.cache/mutt/mailbox/header_cache
@@ -23,22 +35,20 @@ set sort_aux = date-received
 set fast_reply = yes
 set include = yes
 
-set mailcap_path = ~/.config/mutt/mailcap
 auto_view text/html
-alternative_order text/plain text/html
+auto_view application/pgp-encrypted
+set mailcap_path = ~/.config/mutt/mailcap
 
 # Query setup
 set query_command = 'echo "" && notmuch address from:%s'
 set query_format="%4c %t %-70.70a %-70.70n %?e?(%e)?"
 
-# Macros
-macro index S "<shell-escape>sh ~/.config/mutt/sync-email.sh<enter>" "sync email"
-macro index,pager A "<save-message>+Archive<Enter>" "Archive"
-macro index,pager \cb "<pipe-message> urlscan<Enter>" "scan for urls"
-
 set sidebar_visible
 set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
-#set sidebar_format = "%D%* [%N]%*"
+set sidebar_delim_chars = "/"
+set sidebar_short_path
+set sidebar_folder_indent
+set sidebar_indent_string="  "
 set mail_check_stats
 
 set recall = no
@@ -51,6 +61,10 @@ set sleep_time = 0
 
 # There's a delay on this which can be removed by specifying ESCDELAY=0 as env
 set abort_key = '<ESC>'
+
+# ------------------
+# PGP Configuration
+# ------------------
 
 # My PGP key
 set pgp_default_key = 0x6977EFCFCE97881B
@@ -76,16 +90,6 @@ set crypt_replysignencrypted = yes
 # Use experimental key validation over DNS.
 set crypt_use_pka = yes
 
-ignore *
-unignore From \
-         To \
-         Subject \
-         Date \
-         Delivered-To \
-         Return-Path \
-         DKIM-Signature \
-
-
 # https://datatracker.ietf.org/doc/draft-josefsson-openpgp-mailnews-header/
 my_hdr OpenPGP: url=https://jensenkarlsson.se/public.asc\;id=6977EFCFCE97881B
 
@@ -95,10 +99,91 @@ set postpone_encrypt = yes
 # Save encrypted copies of outgoing messages
 set pgp_self_encrypt = yes
 
-source vim-keys.rc
-source colors.rc
+#------------------------------------------------------------
+# Vi Key Bindings
+#------------------------------------------------------------
 
-# Hooks
-set timeout = 20
-startup-hook 'echo `sh ~/.config/mutt/sync-email.sh`'
-timeout-hook 'echo `sh ~/.config/mutt/sync-email.sh`'
+# Moving around
+bind attach,browser,index       g   noop
+bind attach,browser,index       gg  first-entry
+bind attach,browser,index       G   last-entry
+bind pager                      g   noop
+bind pager                      gg  top
+bind pager                      G   bottom
+bind pager                      k   previous-line
+bind pager                      j   next-line
+
+# Sidebar
+bind index                      \Cj sidebar-next
+bind index                      \Ck sidebar-prev
+bind index                      \Co sidebar-open
+
+bind pager,index                B   sidebar-toggle-visible
+bind pager,index                d   noop
+bind pager,index                dd  delete-message
+bind pager,index                dD  purge-message
+
+# Threads
+bind browser,pager,index        N   search-opposite
+bind pager,index                dT  delete-thread
+bind pager,index                dt  delete-subthread
+bind index                      j   next-entry
+bind index                      k   previous-entry
+
+# Editor
+bind editor <Tab> complete-query
+bind editor ^T complete
+
+# Macros
+macro index S "<shell-escape>sh ~/.config/mutt/sync-email.sh<enter>" "sync email"
+macro index,pager A "<save-message>+Archive<Enter>" "Archive"
+macro index,pager \cb "<pipe-message> urlscan<Enter>" "scan for urls"
+
+# ---------------
+# Colors
+# ---------------
+
+color   normal      default default                # default colours
+color   index       brightblue default ~N          # new messages
+color   index       red default ~F                 # flagged messages
+color   index       blue default ~T                # tagged messages
+color   index       cyan default ~D                # deleted messages
+
+# The older the email, the darker it appears.
+color   index       color250 default  "~d >7d"     # older than 7 days
+color   index       color245 default  "~d >20d"    # older than 20 days
+color   index       color240 default  "~d >30d"    # older than 30 days
+color   index       color238 default  "~d >90d"    # older than 90 days
+
+color   body        brightyellow default    (https?|ftp)://[\-\.+,/%~_:?&=\#a-zA-Z0-9]+
+color   body        brightgreen default     [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
+color   attachment  magenta default                # attachments
+color   signature   brightwhite default            # sigs
+color   search      brightred black                # highlight results
+
+color   indicator   brightyellow default           # currently highlighted message
+color   error       red default                    # error messages
+color   status      black cyan                     # status line
+color   tree        brightblack default            # thread tree
+color   tilde       cyan default                   # blank line padding
+
+color   hdrdefault  black cyan                     # default headers
+color   header      brightwhite cyan "^From:"
+color   header      brightwhite cyan "^Subject:"
+
+color   quoted      cyan default                   # quote colours
+color   quoted1     brightcyan default
+color   quoted2     blue default
+color   quoted3     green default
+color   quoted4     yellow default
+color   quoted5     red default
+
+color    body       green default           "^gpg: Good signature from"
+color    body       brightred default       "^gpg: Bad signature from"
+color    body       brightred default       "^gpg: BAD signature from"
+color    body       brightred default       "^gpg: Note: This key has expired!"
+color    body       brightyellow default    "^gpg: WARNING: This key is not certified with a trusted signature!"
+color    body       brightyellow default    "^gpg:          There is no indication that the signature belongs to the owner."
+color    body       brightyellow default    "^gpg: can't handle these multiple signatures"
+color    body       brightyellow default    "^gpg: signature verification suppressed"
+color    body       brightyellow default    "^gpg: invalid node with packet of type"

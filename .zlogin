@@ -1,11 +1,13 @@
 case "${XDG_VTNR}" in
     1)  if [ -z "${WAYLAND_DISPLAY}" ] && which sway &> /dev/null; then
-            export MOZ_ENABLE_WAYLAND=1
-            export QT_QPA_PLATFORM=wayland
-            export QT_STYLE_OVERRIDE=kvantum
-            export GTK_THEME=Arc-Dark-solid
-            export _JAVA_AWT_WM_NONREPARENTING=1
-            exec dbus-run-session sway --unsupported-gpu
+            while IFS== read -r key value; do
+                printf -v "$key" %s "$value" && export "$key"
+            done < ~/.config/sway/env
+
+            unset DISPLAY WAYLAND_DISPLAY
+            export XDG_SESSION_DESKTOP=sway
+            export XDG_CURRENT_DESKTOP=$XDG_SESSION_DESKTOP
+            exec systemd-cat -t sway sway
         fi
         ;;
     *)

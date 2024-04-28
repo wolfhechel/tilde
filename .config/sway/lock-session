@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Lock GPG agent
+echo RELOADAGENT | gpg-connect-agent
+
+swaylock && loginctl unlock-session

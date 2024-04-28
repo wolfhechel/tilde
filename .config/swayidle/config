@@ -1,0 +1,10 @@
+timeout 300 'grep 0 ~/.config/sway/system/charging && loginctl lock-session'
+timeout 600 'grep 0 ~/.config/sway/system/charging  && swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
+
+timeout 1800 'loginctl lock-session'
+timeout 3600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
+
+before-sleep 'loginctl lock-session'
+after-resume 'swaymsg "output * dpms on" && swaymsg "output eDP-1 enable"'
+
+lock 'bash ~/.config/sway/lock-session'
