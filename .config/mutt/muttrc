@@ -135,7 +135,7 @@ bind editor <Tab> complete-query
 bind editor ^T complete
 
 # Macros
-macro index S "<shell-escape>sh ~/.config/mutt/sync-email.sh<enter>" "sync email"
+macro index S "<shell-escape>~/.config/mutt/scripts/sync<enter>" "sync email"
 macro index,pager A "<save-message>+Archive<Enter>" "Archive"
 macro index,pager \cb "<pipe-message> urlscan<Enter>" "scan for urls"
 
