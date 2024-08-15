@@ -1,8 +1,0 @@
-#!/bin/sh
-
-mbox="$1"
-
-echo $(find "$mbox" -name .uidvalidity | sort | while read -r line; do
-    mailbox=$(realpath -s --relative-to="$mbox" "$line")
-    echo +${mailbox%%/.*}
-done)

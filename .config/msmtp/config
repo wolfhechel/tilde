@@ -10,3 +10,13 @@ tls_starttls    on
 from            Pontus Jensen Karlsson <pontus@jensenkarlsson.se>
 user            pontus@jensenkarlsson.se
 passwordeval    "pass mailbox"
+
+account         gmail
+host            smtp.gmail.com
+port            465
+tls_starttls    off
+from            Pontus Jensen Karlsson <pontusjoncarlsson@gmail.com>
+user            pontusjoncarlsson
+passwordeval    "pass gmail"
+
+account default: mailbox

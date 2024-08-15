@@ -1,0 +1,20 @@
+set realname = "Pontus Jensen Karlsson"
+set from = "pontusjoncarlsson@gmail.com"
+set sendmail = "msmtp -a gmail"
+
+set mbox_type = Maildir
+set folder = ~/.local/mail/gmail
+
+unmailboxes *
+mailboxes `find $folder -name .uidvalidity | xargs dirname | sort -u | tr '\n' ' '`
+
+set spoolfile = +Inbox
+set postponed = +Drafts
+set record = +Sent
+set trash = +Trash
+
+color status     brightgreen    red
+
+macro index ss "<shell-escape>NOTMUCH_PROFILE=gmail notmuch new<enter>" "synchronize mail to upstream"
+macro index sa "<sync-mailbox><enter-command>source ~/.config/neomutt/profiles.d/mailbox<enter><change-folder>!<enter>;<check-stats>" "switch to pontus@jensenkarlsson.se"
+

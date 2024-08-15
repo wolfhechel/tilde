@@ -11,7 +11,7 @@
 # configured here named ".notmuch".
 #
 [database]
-path=/home/jonet/.local/mail/mailbox
+path=/home/jonet/.local/mail/gmail
 
 # User configuration
 #
@@ -30,7 +30,8 @@ path=/home/jonet/.local/mail/mailbox
 #
 [user]
 name=Pontus Jensen Karlsson
-primary_email=pontus@jensenkarlsson.se
+primary_email=pontusjoncarlsson@gmail.com
+other_email=pontuscarlsson@live.se
 
 # Configuration for "notmuch new"
 #

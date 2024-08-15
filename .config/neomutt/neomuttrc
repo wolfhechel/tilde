@@ -1,23 +1,3 @@
-set realname = "Pontus Jensen Karlsson"
-set from = "pontus@jensenkarlsson.se"
-
-set mbox_type = Maildir
-set folder = ~/.local/mail
-
-mailboxes `~/.config/mutt/scripts/mailboxes ~/.local/mail`
-
-set spoolfile = +INBOX
-set postponed = +Drafts
-set record = +Sent
-set trash = +Trash
-
-subscribe nicar-l@po.missouri.edu
-
-# Hooks
-startup-hook `~/.config/mutt/scripts/sync`
-
-set sendmail = "msmtp -a mailbox"
-
 # Ignore all headers, whitelist certain ones
 ignore *
 unignore From \
@@ -37,7 +17,7 @@ set include = yes
 
 auto_view text/html
 auto_view application/pgp-encrypted
-set mailcap_path = ~/.config/mutt/mailcap
+set mailcap_path = ~/.config/neomutt/mailcap
 
 # Query setup
 set query_command = 'echo "" && notmuch address from:%s'
@@ -104,40 +84,42 @@ set pgp_self_encrypt = yes
 #------------------------------------------------------------
 
 # Moving around
-bind attach,browser,index       g   noop
-bind attach,browser,index       gg  first-entry
-bind attach,browser,index       G   last-entry
-bind pager                      g   noop
-bind pager                      gg  top
-bind pager                      G   bottom
-bind pager                      k   previous-line
-bind pager                      j   next-line
+bind     attach,browser,index       g       noop
+bind     attach,browser,index       gg      first-entry
+bind     attach,browser,index       G       last-entry
+bind     pager                      g       noop
+bind     pager                      gg      top
+bind     pager                      G       bottom
+bind     pager                      k       previous-line
+bind     pager                      j       next-line
 
 # Sidebar
-bind index                      \Cj sidebar-next
-bind index                      \Ck sidebar-prev
-bind index                      \Co sidebar-open
+bind     index                      \Cj     sidebar-next
+bind     index                      \Ck     sidebar-prev
+bind     index                      \Co     sidebar-open
 
-bind pager,index                B   sidebar-toggle-visible
-bind pager,index                d   noop
-bind pager,index                dd  delete-message
-bind pager,index                dD  purge-message
+bind     pager,index                B       sidebar-toggle-visible
+bind     pager,index                d       noop
+bind     pager,index                dd      delete-message
+bind     pager,index                dD      purge-message
 
 # Threads
-bind browser,pager,index        N   search-opposite
-bind pager,index                dT  delete-thread
-bind pager,index                dt  delete-subthread
-bind index                      j   next-entry
-bind index                      k   previous-entry
+bind     browser,pager,index        N       search-opposite
+bind     pager,index                dT      delete-thread
+bind     pager,index                dt      delete-subthread
+bind     index                      j       next-entry
+bind     index                      k       previous-entry
 
 # Editor
-bind editor <Tab> complete-query
-bind editor ^T complete
+bind     editor                     <Tab>   complete-query
+bind     editor                     ^T      complete
 
 # Macros
-macro index S "<shell-escape>~/.config/mutt/scripts/sync<enter>" "sync email"
-macro index,pager A "<save-message>+Archive<Enter>" "Archive"
-macro index,pager \cb "<pipe-message> urlscan<Enter>" "scan for urls"
+bind     index                      s       noop
+macro    index,pager                \cb "<pipe-message> urlscan<Enter>" "scan for urls"
+macro index c '<change-folder>?<change-dir><home>^K=<enter>'
+
+source ~/.config/neomutt/profiles.d/mailbox
 
 # ---------------
 # Colors
@@ -153,7 +135,6 @@ color   index       cyan default ~D                # deleted messages
 color   index       color250 default  "~d >7d"     # older than 7 days
 color   index       color245 default  "~d >20d"    # older than 20 days
 color   index       color240 default  "~d >30d"    # older than 30 days
-color   index       color238 default  "~d >90d"    # older than 90 days
 
 color   body        brightyellow default    (https?|ftp)://[\-\.+,/%~_:?&=\#a-zA-Z0-9]+
 color   body        brightgreen default     [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
@@ -163,7 +144,7 @@ color   search      brightred black                # highlight results
 
 color   indicator   brightyellow default           # currently highlighted message
 color   error       red default                    # error messages
-color   status      black cyan                     # status line
+#color   status      black cyan                     # status line
 color   tree        brightblack default            # thread tree
 color   tilde       cyan default                   # blank line padding
 

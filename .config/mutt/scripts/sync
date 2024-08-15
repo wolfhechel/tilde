@@ -1,8 +1,0 @@
-#!/bin/sh
-
-gpg-connect-agent updatestartuptty /bye
-
-if mbsync -R -a; then
-    notmuch new
-    notmuch tag +deleted folder:Trash
-fi
