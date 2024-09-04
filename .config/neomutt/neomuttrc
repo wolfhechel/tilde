@@ -47,7 +47,7 @@ set abort_key = '<ESC>'
 # ------------------
 
 # My PGP key
-set pgp_default_key = 0x6977EFCFCE97881B
+set pgp_default_key = 0x09D98BB91EFB858C
 
 # Use GPG Made Easy for seamless gpg-agent integration
 set crypt_use_gpgme = yes
@@ -92,6 +92,10 @@ bind     pager                      gg      top
 bind     pager                      G       bottom
 bind     pager                      k       previous-line
 bind     pager                      j       next-line
+bind     pager                      r       noop
+bind     pager                      rs      reply
+bind     pager                      ra      group-reply
+bind     pager                      rl      list-reply
 
 # Sidebar
 bind     index                      \Cj     sidebar-next

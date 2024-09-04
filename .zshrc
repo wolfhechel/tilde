@@ -176,16 +176,3 @@ for _addon in ~/.zsh/addons/*; do
 done
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
-
-export MAMBA_EXE='/home/jonet/.local/bin/micromamba';
-export MAMBA_ROOT_PREFIX='/home/jonet/.micromamba';
-
-if [ -f "${MAMBA_EXE}" ]; then
-    __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
-    if [ $? -eq 0 ]; then
-        eval "$__mamba_setup"
-    else
-        alias micromamba="$MAMBA_EXE"
-    fi
-    unset __mamba_setup
-fi

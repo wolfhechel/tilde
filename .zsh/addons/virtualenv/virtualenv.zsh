@@ -2,7 +2,6 @@
 # Automatic virtual environment
 # -------------------------------------
 
-
 # Deactivate Virtual Environment
 deactivate () {
     if [ ! -n "$VIRTUAL_ENV" ]; then
@@ -42,11 +41,8 @@ activate () {
         return 1
     fi
 
-    if [ -n "${1}" ]; then
-        VIRTUAL_ENV="$(sed -e '/VIRTUAL_ENV=/!d' -e 's/VIRTUAL_ENV=\"\(.*\)\"/\1/' bin/activate)"
-    else
-        VIRTUAL_ENV="${1}"
-    fi
+    VIRTUAL_ENV="$(sed -e '/VIRTUAL_ENV="/!d' -e 's/.*VIRTUAL_ENV=\"\(.*\)\"/\1/' bin/activate)"
+
     export VIRTUAL_ENV
 
     _OLD_VIRTUAL_PATH="$PATH"
@@ -68,12 +64,10 @@ activate () {
 # Test if current directory is a virtual environment, if so ask for activation
 do_virtualenv()
 {
-    # If bin/active is a file and both VIRTUAL_ENV and virtual_env_ignore_ is unset
+    # If bin/active is a file and VIRTUAL_ENV is unset
     # then ask for activation.
-    if [ ! -n "$VIRTUAL_ENV" ] && [ ! -n "${virtual_env_ignore_}" ] && [ -f bin/activate ]; then
-        VIRTUAL_ENV_NAME="$(sed -e '/VIRTUAL_ENV=/!d' -e 's/VIRTUAL_ENV=\"\(.*\)\"/\1/' bin/activate)"
-
-        activate "$VIRTUAL_ENV_NAME" 
+    if [ ! -n "$VIRTUAL_ENV" ] && [ -f bin/activate ]; then
+        activate
     fi
 
     # If we've left our virtual environment ask for deactivation, but only

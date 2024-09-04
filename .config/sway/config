@@ -1,4 +1,4 @@
-xwayland disable
+xwayland enable
 
 # Default terminal
 set $term foot
@@ -33,6 +33,12 @@ for_window [app_id="^.*"] inhibit_idle fullscreen
 
 # When running alacritty with "launcher class" make sure it's modal
 for_window [app_id="^launcher$"] floating enable, border none, opacity 0.9
+
+# Move detached buttons for Android Emulator to scratchpad
+for_window [class="Emulator" window_type="utility"] move scratchpad
+
+# Set emulator size
+for_window [class="Emulator" window_type="normal"] resize set width 472
 
 # Configure inputs
 
