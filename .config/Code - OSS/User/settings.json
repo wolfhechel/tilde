@@ -2,11 +2,17 @@
     "workbench.colorTheme": "Nord",
     "workbench.startupEditor": "none",
     "workbench.editor.labelFormat": "short",
-    "explorer.sortOrder": "filesFirst",
     "[svelte]": {
         "editor.defaultFormatter": "svelte.svelte-vscode"
     },
     "svelte.plugin.svelte.defaultScriptLanguage": "ts",
     "svelte.enable-ts-plugin": true,
-    "go.toolsManagement.autoUpdate": true
+    "go.toolsManagement.autoUpdate": true,
+    "cmake.showOptionsMovedNotification": false,
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+    "workbench.tips.enabled": false,
+    "cmake.showConfigureWithDebuggerNotification": false
 }

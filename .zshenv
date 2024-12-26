@@ -5,10 +5,33 @@ export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/$UID}
 
+# Move legacy paths to XDG
+
+# Golang
+export GOPATH="$XDG_DATA_HOME/go"
+export GOMODCACHE="$XDG_CACHE_HOME/go-mod"
+
+# Docker
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+
+# npm
+export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
+
+# screen
+export SCREENRC="$XDG_CONFIG_HOME/screen/screenrc"
+export SCREENDIR="$XDG_RUNTIME_DIR/screen"
+
+# Wine
+export WINEPREFIX="$XDG_DATA_HOME/wine/default"
+
+# W3M
+export W3M_DIR="$XDG_CONFIG_HOME/w3m"
+
 # Set user paths
 _paths_to_try=(
     "${HOME}/.bin"
     "${HOME}/.wp-cli/bin"
+    "${HOME}/.local/bin"
 )
 
 for path_to_try in ${_paths_to_try}; do
@@ -66,6 +89,7 @@ fi
 [ "${TTY}" != "/dev/tty" ] && export GPG_TTY="${TTY}"
 
 unset SSH_AGENT_PID
+
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi

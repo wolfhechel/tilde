@@ -1,1 +1,5 @@
-.tilde
+tilde.git
+.password-store
+.gnupg/*
+~.gnupg/*.conf
+.ssh/known_hosts*

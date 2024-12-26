@@ -67,8 +67,10 @@ export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
 alias grep='grep --color'
 alias less='less -R'
 
-if [ -d $HOME/.tilde ]; then
-    alias tilde='git --git-dir=$HOME/.tilde --work-tree=$HOME'
+TILDE_DIR="${XDG_STATE_DIR:-${HOME}/.local/state}/tilde.git"
+
+if [ -d "${TILDE_DIR}" ]; then
+    alias tilde='git --git-dir="${TILDE_DIR}" --work-tree=$HOME'
     compdef _git tilde
 fi
 
@@ -176,3 +178,5 @@ for _addon in ~/.zsh/addons/*; do
 done
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+
+eval "$(register-python-argcomplete pipx)"

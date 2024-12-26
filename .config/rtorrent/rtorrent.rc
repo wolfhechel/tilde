@@ -1,3 +1,3 @@
 pieces.hash.on_completion.set = yes
 directory.default.set = ~/Downloads
-session.path.set = ~/.local/rtorrent.session
+session.path.set = ~/.local/state/rtorrent/session

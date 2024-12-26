@@ -5,7 +5,6 @@
 # Deactivate Virtual Environment
 deactivate () {
     if [ ! -n "$VIRTUAL_ENV" ]; then
-        echo "There's no active virtual environment to deactivate!" 1>&2
         return 1
     fi
 
@@ -15,12 +14,6 @@ deactivate () {
         PATH="$_OLD_VIRTUAL_PATH"
         export PATH
         unset _OLD_VIRTUAL_PATH
-    fi
-
-    if [ -n "$_OLD_VIRTUAL_PYTHONHOME" ] ; then
-        PYTHONHOME="$_OLD_VIRTUAL_PYTHONHOME"
-        export PYTHONHOME
-        unset _OLD_VIRTUAL_PYTHONHOME
     fi
 
     rehash
@@ -34,14 +27,21 @@ deactivate () {
     unset VIRTUAL_ENV
 }
 
+awk_env () {
+    awk "/^setenv $1 / {print \$3}" bin/activate.csh
+}
+
 # Activate Virtual Environment
 activate () {
     if [ -n "$VIRTUAL_ENV" ]; then
-        echo Another virtual environment is already in use! 1>&2
         return 1
     fi
 
-    VIRTUAL_ENV="$(sed -e '/VIRTUAL_ENV="/!d' -e 's/.*VIRTUAL_ENV=\"\(.*\)\"/\1/' bin/activate)"
+    VIRTUAL_ENV="$(awk_env VIRTUAL_ENV)"
+
+    if [ -z "${VIRTUAL_ENV}" ]; then
+        return 2
+    fi
 
     export VIRTUAL_ENV
 
@@ -49,13 +49,10 @@ activate () {
     PATH="$VIRTUAL_ENV/bin:$PATH"
     export PATH
 
-    if [ -n "$PYTHONHOME" ] ; then
-        _OLD_VIRTUAL_PYTHONHOME="$PYTHONHOME"
-        unset PYTHONHOME
-    fi
+    VIRTUAL_ENV_PROMPT="$(awk_env VIRTUAL_ENV_PROMPT)"
 
     _OLD_VIRTUAL_RPROMPT="$RPROMPT"
-    RPROMPT="{`basename \"$VIRTUAL_ENV\"`} $RPROMPT"
+    RPROMPT="{$VIRTUAL_ENV_PROMPT} $RPROMPT"
     export RPROMPT
 
     rehash
@@ -66,7 +63,7 @@ do_virtualenv()
 {
     # If bin/active is a file and VIRTUAL_ENV is unset
     # then ask for activation.
-    if [ ! -n "$VIRTUAL_ENV" ] && [ -f bin/activate ]; then
+    if [ ! -n "$VIRTUAL_ENV" ] && [ -f bin/activate.csh ]; then
         activate
     fi
 
