@@ -1,5 +1,0 @@
-#!/bin/sh
-
-gpg-connect-agent updatestartuptty /bye
-
-mbsync -R mailbox

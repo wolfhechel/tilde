@@ -9,10 +9,17 @@ set $internal_display eDP-1
 output * bg ~/.config/sway/background.png fill
 
 # Set default resolution on our outputs
-output $internal_display res 1920x1080 pos 960 2160
-# output $internal_display res 1920x1080 pos 0 0
+#output $internal_display res 1920x1080 pos 960 2160
+ output $internal_display res 1920x1080 pos 0 0
 # output DP-1 res 1920x1080@143.997Hz
 output "BNQ BenQ PD3200U DAJ01738019" res 2560x1440 pos 0 0
+
+input "2:14:ETPS/2_Elantech_TrackPoint" {
+    accel_profile flat
+    pointer_accel 1
+    dwt disabled
+    dwtp disabled
+}
 
 # Clamshell mode
 bindswitch --locked lid:on output $internal_display disable
@@ -242,7 +249,7 @@ set $urgent_fg $nord6
 set $second_bg $nord3
 set $second_fg $nord6
 
-set $font SourceCodePro Regular 12
+set $font monospace 12
 
 client.focused           $focus_bg  $focus_bg  $focus_fg
 client.focused_inactive  $second_bg $second_bg $second_fg

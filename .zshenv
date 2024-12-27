@@ -27,11 +27,24 @@ export WINEPREFIX="$XDG_DATA_HOME/wine/default"
 # W3M
 export W3M_DIR="$XDG_CONFIG_HOME/w3m"
 
+# R
+R_HOME_USER="${XDG_CONFIG_HOME}/R"
+R_PROFILE_USER="${R_HOME_USER}/profile"
+R_ENVIRON_USER="${R_HOME_USER}/environ"
+R_HISTFILE="${XDG_STATE_HOME}/Rhistory"
+
+# Perl environment configuration
+export PERL_LOCAL_LIB_ROOT="${XDG_STATE_HOME}/perl5";
+export PERL_MB_OPT="--install_base ${PERL_LOCAL_LIB_ROOT}";
+export PERL_MM_OPT="INSTALL_BASE=${PERL_LOCAL_LIB_ROOT}";
+export PERL5LIB="${PERL_LOCAL_LIB_ROOT}/lib/perl5/x86_64-linux-thread-multi:${PERL_LOCAL_LIB_ROOT}/lib/perl5";
+
 # Set user paths
 _paths_to_try=(
     "${HOME}/.bin"
     "${HOME}/.wp-cli/bin"
     "${HOME}/.local/bin"
+    "${PERL_LOCAL_LIB_ROOT}/bin"
 )
 
 for path_to_try in ${_paths_to_try}; do
@@ -51,18 +64,7 @@ if [ -d $HOME/.gem ]; then
     done &>/dev/null
 fi
 
-# Perl environment configuration
-PERL_LOCAL_LIB_ROOT="${XDG_STATE_HOME}/perl5";
-PERL_MB_OPT="--install_base ${PERL_LOCAL_LIB_ROOT}";
-PERL_MM_OPT="INSTALL_BASE=${PERL_LOCAL_LIB_ROOT}";
-PERL5LIB="${PERL_LOCAL_LIB_ROOT}/lib/perl5/x86_64-linux-thread-multi:${PERL_LOCAL_LIB_ROOT}/lib/perl5";
-PATH="${PERL_LOCAL_LIB_ROOT}/bin:$PATH";
-
-export PERL_LOCAL_LIB_ROOT \
-       PERL_MB_OPT \
-       PERL_MM_OPT \
-       PERL5LIB \
-       PATH
+[ ! -d ${XDG_STATE_HOME}/zsh ] && mkdir -p "${XDG_STATE_HOME}/zsh"
 
 # History configuration
 export HISTIGNORE="&:ls:[bf]g:exit:reset:clear:cd:cd ..:cd.."
@@ -93,10 +95,3 @@ unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 fi
-
-
-# Move R configurations
-R_HOME_USER="${XDG_CONFIG_HOME}/R"
-R_PROFILE_USER="${R_HOME_USER}/profile"
-R_ENVIRON_USER="${R_HOME_USER}/environ"
-R_HISTFILE="${XDG_STATE_HOME}/Rhistory"

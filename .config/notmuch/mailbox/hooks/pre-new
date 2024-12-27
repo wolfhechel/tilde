@@ -2,7 +2,7 @@
 
 gpg-connect-agent updatestartuptty /bye
 
-profile="gmail"
+profile="mailbox"
 
 MAILDIR="${HOME}/.local/mail/${profile}"
 
