@@ -1,0 +1,13 @@
+[Unit]
+Description=kansi: Dynamic display configuration daemon
+Documentation=man:kanshi(1)
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/kanshi
+Restart=always
+
+[Install]
+WantedBy=graphical-session.target

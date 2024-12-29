@@ -1,0 +1,18 @@
+profile {
+    output "BNQ BenQ PD3200U DAJ01738019" {
+        mode 2560x1440
+        position 0,0
+    }
+
+    output eDP-1 { 
+        mode 1920x1080
+        position 320,1440
+    }
+}
+
+profile {
+    output eDP-1 {
+        mode 1920x1080
+        position 0,0
+    }
+}
