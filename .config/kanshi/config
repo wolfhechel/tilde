@@ -1,18 +1,48 @@
-profile {
-    output "BNQ BenQ PD3200U DAJ01738019" {
+output eDP-1 alias $internal enable mode 1920x1080
+output "BNQ BenQ PD3200U DAJ01738019" alias $external enable
+
+profile docked {
+    output $external {
+        enable
         mode 2560x1440
         position 0,0
     }
 
-    output eDP-1 { 
-        mode 1920x1080
+    output $internal { 
+        enable
         position 320,1440
     }
 }
 
-profile {
-    output eDP-1 {
+profile lowres {
+    output $external {
+        enable
         mode 1920x1080
+        position 0,0
+    }
+
+    output $internal { 
+        enable
+        position 0,1080
+    }
+}
+
+profile clamshell {
+    output $external {
+        enable
+        mode 2560x1440
+        position 0,0
+    }
+
+    output $internal { 
+        disable
+        position 320,1440
+    }
+}
+
+profile laptop-only {
+    output $internal {
+        enable
         position 0,0
     }
 }
