@@ -8,7 +8,7 @@ IMAPStore mailbox-remote
     Port 993
     User pontus@jensenkarlsson.se
     PassCmd "pass mailbox"
-    SSLType IMAPS
+    TLSType IMAPS
 
 MaildirStore mailbox-local
     SubFolders Verbatim
@@ -24,7 +24,7 @@ IMAPStore gmail-remote
     Host imap.gmail.com
     User pontusjoncarlsson@gmail.com
     PassCmd "pass gmail"
-    SSLType IMAPS
+    TLSType IMAPS
 
 MaildirStore gmail-local
     SubFolders Verbatim

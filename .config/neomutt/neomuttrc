@@ -12,6 +12,8 @@ set message_cachedir = ~/.cache/mutt/mailbox/message_cache
 set sort = reverse-threads
 set sort_aux = date-received
 
+set hostname = 'example.com'
+
 set fast_reply = yes
 set include = yes
 
