@@ -63,13 +63,28 @@ freemem_fn() {
         | xargs -I {} echo 'scale=1; {}/1024^2' | bc
 }
 
-window_fn() {
-    # Blocking, do not use
-    swaymsg -t subscribe -m '["window"]' | jq -r '.container.name'
-}
-
 function format() {
-    echo -n "{\"full_text\":\"${1}\"},"
+    content="$1"
+    urgent="${2:-false}"
+    width="${3:-100}"
+    align="${4:-center}"
+
+    cat << JSON
+    {
+        "full_text": "${content}",
+        "urgent": "${urgent}",
+        "background": "#e5e9f0",
+        "color": "#434c5e",
+        "min_width": ${width},
+        "align": "${align}",
+        "border_top": 0,
+        "border_bottom": 0,
+        "border_left": 0,
+        "border_right": 0,
+        "separator_block_width": 2,
+        "separator": false
+    }
+JSON
 }
 
 echo '{ "version": 1 }'
@@ -78,19 +93,10 @@ echo '['
 while :; do
 cat << JSON
 [
-    {
-        "full_text": "$(freemem_fn)G"
-    },
-    {
-        "full_text": "$(wifi_wpa_cli_ssid_fn /run/wpa_supplicant) ($(wifi_signal_strength_fn wlp3s0))"
-    },
-    {
-        "full_text": "$(battery_level_fn BAT0)%$(charging_fn "~")",
-        "urgent": $(battery_level_critical_fn BAT0 10)
-    },
-    {
-        "full_text": "$(date_fn)"
-    }
+    $(format "$(freemem_fn)G" false 80),
+    $(format "$(wifi_wpa_cli_ssid_fn /run/wpa_supplicant) ($(wifi_signal_strength_fn wlp3s0))" false 200),
+    $(format "$(battery_level_fn BAT0)%$(charging_fn "~")" "$(battery_level_critical_fn BAT0 10)" 60),
+    $(format "$(date_fn)" false 130)
 ],
 JSON
     sleep 1

@@ -1,13 +1,35 @@
 #!/bin/sh
 
+get_updates() {
+    last_upgrade_time=$(grep "\[PACMAN\] starting full system upgrade" /var/log/pacman.log | tail -1 | grep -oP '\[\K[^\]]+' | head -1)
+    last_upgrade_utime=$(date '+%s' -d "$last_upgrade_time")
+    current_utime=$(date '+%s')
+
+    time_diff=$(( $current_utime - $last_upgrade_utime ))
+    day_diff=$(( $time_diff / 86400 ))
+    hour_diff=$(( ($time_diff - 86400 * $day_diff) / 3600 ))
+
+    if [ $day_diff -gt 0 ]; then
+        updates_avail=$(($(pacman -Qu | wc -l)))
+
+        msg="Last update: $day_diff days, $hour_diff hours (${updates_avail} packages to update)"
+    else
+        msg="System up to date"
+    fi
+
+    echo $msg
+}
+
 python <<HEREDOC |
 import glob, os, re
 
-search_dirs = [
+from pathlib import Path
+
+search_dirs = map(Path, [
     os.path.expanduser('~/.local/share/applications'),
     '/usr/local/share/applications',
     '/usr/share/applications'
-]
+])
 
 def get_term(pid, halt=False):
     with open('/proc/%s/stat' % pid, 'r') as stat:
@@ -23,7 +45,6 @@ def get_term(pid, halt=False):
 
 current_shell = os.path.basename(os.getenv('SHELL', ''))
 term = get_term(os.getpid())
-
 
 FMT_RE = re.compile(r'\s?%.')
 
@@ -62,16 +83,17 @@ def read_desktop_entry(fh):
 parsed_entries = []
 
 for search_dir in search_dirs:
-    for file in glob.glob('%s/**.desktop' % search_dir):
-        entry_name = os.path.basename(file)
+    for desktop_entry in search_dir.rglob('*.desktop'):
+        entry_name = desktop_entry.name
 
         if entry_name in parsed_entries:
             continue
 
-        with open(file, 'r', encoding='utf-8') as fh:
+        with desktop_entry.open('r', encoding='utf-8') as fh:
             if entry := read_desktop_entry(fh):
                 print(entry)
 
         parsed_entries.append(entry_name)
 HEREDOC
-fzf --layout=reverse --no-info -d\; --with-nth=2 --nth=1 | cut -d\; -f1
+
+fzf --layout=reverse --no-info -d\; --with-nth=2 --nth=1 --header="$(get_updates)" --header-first | cut -d\; -f1

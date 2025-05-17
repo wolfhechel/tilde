@@ -3,4 +3,16 @@
 # Lock GPG agent
 echo RELOADAGENT | gpg-connect-agent
 
-swaylock && loginctl unlock-session
+swaylock &
+_PID=$!
+
+(
+    while kill -0 ${_PID}; do
+        fprintd-verify && kill -s USR1 ${_PID}
+    done
+) &
+
+wait ${_PID}
+
+loginctl unlock-session
+kill -- -$$
