@@ -1,9 +1,12 @@
 xwayland enable
 
 # Default terminal
-set $term kitty
+set $launcher_id launcher
 
-set $launcher $term --app-id launcher zsh -c "sh ~/.config/sway/launcher | xargs -0 swaymsg exec &>/dev/null"
+set $launcher $TERMINAL --app-id $launcher_id -e ~/.config/sway/launcher
+
+set $floating_term_id floating-term
+set $floating_term $TERMINAL --app-id $floating_term_id -e tmux
 
 # Setup wallpaper
 output * bg ~/.config/sway/background.png fill
@@ -31,10 +34,24 @@ for_window [class="Emulator" window_type="utility"] move scratchpad
 # Set emulator size
 for_window [class="Emulator" window_type="normal"] resize set width 472
 
-# When running alacritty with "launcher class" make sure it's modal
-for_window [app_id="^launcher$"] floating enable, border none, opacity 0.9, resize set 600px 400px
-
 for_window [shell="xwayland"] title_format "[X11] %title%"
+# When running alacritty with "launcher class" make sure it's modal
+for_window [app_id="$launcher_id"] {
+    floating enable
+    border none
+    opacity 0.9
+    resize set 600px 400px
+}
+
+for_window [app_id="$floating_term_id"] {
+    floating enable
+    border none
+    opacity 0.9
+    resize set 100ppt 42ppt
+    move position 0 0
+    move to scratchpad
+    scratchpad show
+}
 
 # Configure inputs
 input "2:14:ETPS/2_Elantech_TrackPoint" {
@@ -123,7 +140,6 @@ mode $prt_sc_mode {
 
 
 bindsym {
-
     # Kill focused window
     $Mod+Shift+Q kill
 
@@ -182,21 +198,23 @@ bindsym {
     # Move the currently focused window to Sway's "scratchpad", 
     # which is a bag of holding for windows.
     # You can send windows there and get them back later.
-    $Mod+Shift+Section move scratchpad
+    # $Mod+Shift+Section move scratchpad
 
     # Show the next scratchpad window or hide the focused scratchpad window.
     # If there are multiple scratchpad windows, this command cycles through them.
-    $Mod+Section scratchpad show
+    # $Mod+Section scratchpad show
+    $Mod+Section exec swaymsg '[app_id="$floating_term_id"] scratchpad show' \
+        || $floating_term
 
     $Mod+R      mode "resize"
     $Mod+Escape mode $pwr_mode
     Print       mode $prt_sc_mode
 
-    # Start launcher
-    $Mod+Space exec $launcher
+    $Mod+Space exec swaymsg '[app_id="$launcher_id"] focus' \
+        || $launcher
 
     # Start a terminal
-    $Mod+Return exec $term
+    $Mod+Return exec $TERMINAL
 
     XF86AudioNext             exec playerctl next
     XF86AudioPrev             exec playerctl previous

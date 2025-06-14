@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=newsboat
-Comment=Launches the ranger file manager
-Icon=utilities-terminal
-Terminal=true
-Exec=newsboat
-Categories=ConsoleOnly;Network;News
-MimeType=inode/directory;

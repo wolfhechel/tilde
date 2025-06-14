@@ -63,6 +63,46 @@ freemem_fn() {
         | xargs -I {} echo 'scale=1; {}/1024^2' | bc
 }
 
+updates_avail=0
+next_update_check=0
+
+get_updates() {
+    current_time=$(date +%s)
+
+    if [ ${current_time} -gt ${next_update_check} ]; then
+        updates_avail=$(($(pacman -Qu | wc -l)))
+        next_update_check=$(($current_time + 3600))
+    fi
+}
+
+has_updates() {
+    if [ $updates_avail -gt 0 ]; then
+        echo "true"
+    else
+        echo "false"
+    fi
+}
+
+get_updates_() {
+    last_upgrade_time=$(grep "\[PACMAN\] starting full system upgrade" /var/log/pacman.log | tail -1 | grep -oP '\[\K[^\]]+' | head -1)
+    last_upgrade_utime=$(date '+%s' -d "$last_upgrade_time")
+    current_utime=$(date '+%s')
+
+    time_diff=$(( $current_utime - $last_upgrade_utime ))
+    day_diff=$(( $time_diff / 86400 ))
+    hour_diff=$(( ($time_diff - 86400 * $day_diff) / 3600 ))
+
+    if [ $day_diff -gt 0 ]; then
+        updates_avail=$(($(pacman -Qu | wc -l)))
+
+        msg="Last update: $day_diff days, $hour_diff hours (${updates_avail} packages to update)"
+    else
+        msg="System up to date"
+    fi
+
+    echo $msg
+}
+
 function format() {
     content="$1"
     urgent="${2:-false}"
@@ -91,12 +131,14 @@ echo '{ "version": 1 }'
 echo '['
 
 while :; do
+    get_updates
 cat << JSON
 [
-    $(format "$(freemem_fn)G" false 80),
-    $(format "$(wifi_wpa_cli_ssid_fn /run/wpa_supplicant) ($(wifi_signal_strength_fn wlp3s0))" false 200),
-    $(format "$(battery_level_fn BAT0)%$(charging_fn "~")" "$(battery_level_critical_fn BAT0 10)" 60),
-    $(format "$(date_fn)" false 130)
+$(format "$(freemem_fn)G" false 80),
+$(format "$(wifi_wpa_cli_ssid_fn /run/wpa_supplicant) ($(wifi_signal_strength_fn wlp3s0))" false 200),
+$(format "$(battery_level_fn BAT0)%$(charging_fn "~")" "$(battery_level_critical_fn BAT0 10)" 60),
+$(format "${updates_avail}" "$(has_updates)" 50),
+$(format "$(date_fn)" false 130)
 ],
 JSON
     sleep 1

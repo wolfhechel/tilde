@@ -1,5 +1,5 @@
-# set font "Liga SF Mono Nerd Font 12"
 set selection-clipboard clipboard
+set selection-notification	"true"
 
 set font			"JetBrains Mono 10"
 set default-fg 			"#eceff4"
@@ -23,7 +23,6 @@ set notification-error-bg	"#2e3440"
 set notification-error-fg	"#bf616a"
 set notification-warning-bg	"#2e3440"
 set notification-warning-fg	"#ebcb8b"
-set selection-notification	"true"
 
 set inputbar-fg			"#eceff4"
 set inputbar-bg 		"#3b4252"

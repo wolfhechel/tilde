@@ -1,5 +1,6 @@
 output eDP-1 alias $internal enable mode 1920x1080
 output "BNQ BenQ PD3200U DAJ01738019" alias $external enable
+output "LG Electronics LG TV 0x01010101" alias $tv enable mode 1920x1080
 
 profile docked {
     output $external {
@@ -23,6 +24,16 @@ profile lowres {
 
     output $internal { 
         enable
+        position 0,1080
+    }
+}
+
+profile tv-docked {
+    output $tv {
+        position 0,0
+    }
+
+    output $internal {
         position 0,1080
     }
 }
